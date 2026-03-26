@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Server, Download, CheckCircle, Menu, X, Home, Package, FileText,
-    Shield, Zap, Globe, ShoppingCart, MessageCircle, ExternalLink,
+    Shield, Zap, Globe, MessageCircle, ExternalLink,
     Clock, Loader2, TrendingUp, Users, BarChart3, Sparkles, ChevronRight,
     Code, Database, Cloud, Settings, Send, Bug,
 } from "lucide-react";
@@ -169,9 +169,9 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
     const navItems = [
         { icon: Home, label: "Home", href: "/" }, 
-        { icon: Package, label: "Packages", href: "/packages" }, 
         { icon: Server, label: "IP Server", href: "/ip-server-terdaftar" }, 
         { icon: FileText, label: "API Docs", href: "/documentation" },
+        { icon: FileText, label: "Artikel", href: "/artikel" },
     ];
 
     const currentYear = new Date().getFullYear();
@@ -262,9 +262,6 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         </TabsContent>
                     </Tabs>
 
-                    {/* CPanel License */}
-                    <Card className="glass border-2 border-primary/20"><CardHeader><div className="flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center"><ShoppingCart className="w-6 h-6 text-orange-400" /></div><div><CardTitle className="text-xl">CPanel License</CardTitle><CardDescription className="text-green-400 font-semibold">Rp15.000</CardDescription></div></div></div></CardHeader><CardContent><div className="grid grid-cols-2 gap-3"><a href="https://license.addpackage.dev" target="_blank"><Button variant="outline" className="w-full h-10 text-xs border-border/50"><ExternalLink className="w-3.5 h-3.5 mr-1.5" />Website</Button></a><a href="https://wa.me/62895403630048" target="_blank"><Button className="w-full h-10 text-xs"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />WhatsApp</Button></a></div></CardContent></Card>
-
                     {/* FAQ Accordion */}
                     <Card className="glass"><CardHeader><CardTitle className="text-lg">FAQ - WHM API</CardTitle><CardDescription>Pertanyaan umum tentang automation</CardDescription></CardHeader><CardContent><Accordion type="single" collapsible className="w-full">{faqs.map((faq, i) => (<AccordionItem key={i} value={`item-${i}`}><AccordionTrigger className="text-sm">{faq.q}</AccordionTrigger><AccordionContent className="text-sm">{faq.a}</AccordionContent></AccordionItem>))}</Accordion></CardContent></Card>
 
@@ -277,7 +274,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             </main>
 
             {/* Footer */}
-            <footer className="border-t border-border/50 mt-16 py-8 bg-muted/20">
+            <footer className="border-t border-border/50 py-8 bg-muted/20 mt-auto">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <div className="flex items-center gap-2">
@@ -287,7 +284,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         </div>
                         <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <a href="/documentation" className="hover:text-primary transition-colors">API Docs</a>
-                            <a href="/packages" className="hover:text-primary transition-colors">Packages</a>
+                            <a href="/artikel" className="hover:text-primary transition-colors">Artikel</a>
                             <a href="https://wa.me/62895403630048" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Contact</a>
                         </div>
                         <p className="text-xs text-muted-foreground">© {currentYear} NdraDev. All rights reserved.</p>
