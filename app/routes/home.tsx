@@ -60,14 +60,14 @@ export function loader({ context }: Route.LoaderArgs) {
 function AnimatedBackground() {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            {/* Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+            {/* Dark Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-background via-slate-950 to-background" />
             
-            {/* Animated Clouds */}
+            {/* Animated Clouds - Dark Theme */}
             {[...Array(6)].map((_, i) => (
                 <motion.div
                     key={i}
-                    className="absolute opacity-[0.05] dark:opacity-[0.08]"
+                    className="absolute opacity-[0.03]"
                     style={{
                         top: `${10 + i * 18}%`,
                         left: `${5 + i * 18}%`,
@@ -82,6 +82,18 @@ function AnimatedBackground() {
                     <img src="/cloud.png" alt="" className="w-40 h-40 md:w-52 md:h-52" />
                 </motion.div>
             ))}
+
+            {/* Gradient Orbs */}
+            <motion.div
+                className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+                className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
+                animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            />
         </div>
     );
 }
@@ -93,9 +105,9 @@ function StatCard({ icon: Icon, label, value, trend, delay }: any) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay }}
         >
-            <Card className="relative overflow-hidden">
+            <Card className="relative overflow-hidden glass">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">{label}</CardTitle>
+                    <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
                     <Icon className="h-5 w-5 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -121,15 +133,15 @@ function FeatureCard({ icon: Icon, title, description, delay }: any) {
             transition={{ duration: 0.5, delay }}
             whileHover={{ y: -5, scale: 1.02 }}
         >
-            <Card className="h-full transition-all duration-300 hover:shadow-lg">
+            <Card className="h-full transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 glass">
                 <CardHeader className="text-center pb-2">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-3">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-3">
                         <Icon className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-lg">{title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <CardDescription className="text-center text-sm">{description}</CardDescription>
+                    <CardDescription className="text-center text-sm text-muted-foreground">{description}</CardDescription>
                 </CardContent>
             </Card>
         </motion.div>
@@ -143,16 +155,16 @@ function IPListCard({ ips, loading }: { ips: Array<{ id: number; ip: string; cre
     };
 
     return (
-        <Card>
+        <Card className="glass">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                             <Server className="w-6 h-6 text-primary" />
                         </div>
                         <div>
                             <CardTitle className="text-lg">IP Server Terdaftar</CardTitle>
-                            <CardDescription>{ips.length} server aktif</CardDescription>
+                            <CardDescription className="text-muted-foreground">{ips.length} server aktif</CardDescription>
                         </div>
                     </div>
                     {loading && <Loader2 className="w-6 h-6 animate-spin text-primary" />}
@@ -173,7 +185,7 @@ function IPListCard({ ips, loading }: { ips: Array<{ id: number; ip: string; cre
                                 initial={{ opacity: 0, x: -15 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: i * 0.05 }}
-                                className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-all duration-200"
+                                className="flex items-center justify-between p-4 rounded-lg border border-border/50 bg-card/50 hover:bg-accent/50 transition-all duration-200"
                             >
                                 <div className="flex items-center gap-4">
                                     <Avatar className="h-12 w-12">
@@ -200,7 +212,7 @@ function IPListCard({ ips, loading }: { ips: Array<{ id: number; ip: string; cre
             </CardContent>
             {ips.length > 0 && (
                 <CardFooter>
-                    <Button variant="outline" className="w-full group" asChild>
+                    <Button variant="outline" className="w-full group border-border/50" asChild>
                         <a href="/ip-server-terdaftar">
                             View All Servers <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </a>
@@ -323,27 +335,27 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         <div className="min-h-screen relative bg-background">
             <AnimatedBackground />
 
-            {/* Alert Banner */}
+            {/* Alert Banner - Dark Theme */}
             <AnimatePresence>
                 {showAlert && (
                     <motion.div
                         initial={{ opacity: 0, y: -100 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -100 }}
-                        className="fixed top-0 left-0 right-0 z-50 border-b bg-gradient-to-r from-primary via-primary/90 to-primary text-primary-foreground shadow-lg"
+                        className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 glass shadow-lg"
                     >
                         <div className="container mx-auto px-4 py-3">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity }}>
-                                        <Sparkles className="w-5 h-5" />
+                                        <Sparkles className="w-5 h-5 text-primary" />
                                     </motion.div>
                                     <div>
                                         <p className="text-sm font-semibold">Add Package System V5</p>
-                                        <p className="text-xs opacity-90">Platform manajemen IP profesional</p>
+                                        <p className="text-xs text-muted-foreground">Platform manajemen IP profesional</p>
                                     </div>
                                 </div>
-                                <Button variant="ghost" size="sm" onClick={() => setShowAlert(false)} className="h-8 text-primary-foreground hover:bg-primary-foreground/20">
+                                <Button variant="ghost" size="sm" onClick={() => setShowAlert(false)} className="h-8 text-muted-foreground hover:text-foreground hover:bg-accent">
                                     <X className="w-4 h-4" />
                                 </Button>
                             </div>
@@ -352,11 +364,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                 )}
             </AnimatePresence>
 
-            {/* Header */}
+            {/* Header - Dark Theme */}
             <motion.header
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className={`sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm ${showAlert ? "mt-[52px]" : ""}`}
+                className={`sticky top-0 z-40 border-b border-border/50 glass shadow-lg ${showAlert ? "mt-[52px]" : ""}`}
             >
                 <div className="container mx-auto px-4">
                     <div className="flex h-16 items-center justify-between">
@@ -365,7 +377,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                 <motion.img 
                                     src="/logo.png" 
                                     alt="Logo" 
-                                    className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-md"
+                                    className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-lg"
                                     whileHover={{ rotate: 360 }}
                                     transition={{ duration: 0.6 }}
                                 />
@@ -378,11 +390,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
                         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="lg:hidden">
+                                <Button variant="ghost" size="icon" className="lg:hidden text-muted-foreground hover:text-foreground">
                                     <Menu className="w-5 h-5" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right" className="w-80">
+                            <SheetContent side="right" className="w-80 glass border-border/50">
                                 <SheetHeader>
                                     <SheetTitle className="flex items-center gap-3">
                                         <img src="/logo.png" alt="Logo" className="w-12 h-12" />
@@ -391,7 +403,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                             <span className="text-xs text-muted-foreground">Enterprise Solutions</span>
                                         </div>
                                     </SheetTitle>
-                                    <SheetDescription>
+                                    <SheetDescription className="text-muted-foreground">
                                         Platform manajemen IP profesional
                                     </SheetDescription>
                                 </SheetHeader>
@@ -416,7 +428,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                 <a
                                     key={item.label}
                                     href={item.href}
-                                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
+                                    className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
                                 >
                                     {item.label}
                                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
@@ -427,10 +439,10 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                 </div>
             </motion.header>
 
-            {/* Main Content */}
+            {/* Main Content - Dark Theme */}
             <main className="container mx-auto px-4 py-12 relative z-10">
                 <div className="max-w-7xl mx-auto space-y-12">
-                    {/* Hero Section with Prominent Vector Asset */}
+                    {/* Hero Section with Vector Asset - Dark Theme */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -442,11 +454,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             transition={{ duration: 0.8, type: "spring", stiffness: 150 }}
                             className="relative inline-block"
                         >
-                            {/* Glow Effect */}
+                            {/* Glow Effect - Dark */}
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                                className="absolute inset-0 bg-gradient-to-r from-primary/20 via-purple-500/20 to-pink-500/20 rounded-full blur-2xl"
+                                className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 rounded-full blur-3xl"
                             />
                             
                             {/* Vector Image */}
@@ -465,7 +477,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             />
                         </motion.div>
 
-                        <Badge variant="secondary" className="gap-2 px-4 py-1.5 text-sm shadow-md">
+                        <Badge variant="secondary" className="gap-2 px-4 py-1.5 text-sm shadow-lg border-border/50">
                             <Sparkles className="w-3.5 h-3.5" />
                             V5.0 Enterprise Edition - Latest Release
                         </Badge>
@@ -473,7 +485,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
                             IP Management
                             <br />
-                            <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                            <span className="bg-gradient-to-r from-primary via-purple-400 to-pink-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                                 Platform
                             </span>
                         </h1>
@@ -483,34 +495,34 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
                         <div className="flex flex-wrap justify-center gap-2.5">
                             {["IP Registration", "Server Management", "API Integration", "24/7 Support"].map((tag) => (
-                                <Badge key={tag} variant="outline" className="px-4 py-2 text-sm shadow-sm">{tag}</Badge>
+                                <Badge key={tag} variant="outline" className="px-4 py-2 text-sm shadow-sm border-border/50">{tag}</Badge>
                             ))}
                         </div>
                     </motion.div>
 
-                    {/* Stats Section */}
+                    {/* Stats Section - Dark Theme */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <StatCard icon={Server} label="Total Server Terdaftar" value={serverCount} trend="+12%" delay={0.1} />
                         <StatCard icon={Users} label="Active Users" value="500+" trend="+25%" delay={0.2} />
                         <StatCard icon={BarChart3} label="API Requests/Day" value="10K+" trend="+18%" delay={0.3} />
                     </div>
 
-                    {/* Features Section */}
+                    {/* Features Section - Dark Theme */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {features.map((feature, i) => (
                             <FeatureCard key={i} {...feature} delay={0.1 + i * 0.1} />
                         ))}
                     </div>
 
-                    {/* Main Content Tabs */}
+                    {/* Main Content Tabs - Dark Theme */}
                     <Tabs defaultValue="register" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 mb-8">
-                            <TabsTrigger value="register" className="text-base py-3">Register IP</TabsTrigger>
-                            <TabsTrigger value="download" className="text-base py-3">Download</TabsTrigger>
+                        <TabsList className="grid w-full grid-cols-2 mb-8 bg-muted/50 border border-border/50">
+                            <TabsTrigger value="register" className="text-base py-3 data-[state=active]:bg-card">Register IP</TabsTrigger>
+                            <TabsTrigger value="download" className="text-base py-3 data-[state=active]:bg-card">Download</TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="register">
-                            <Card className="border-2">
+                            <Card className="border-2 border-border/50 glass">
                                 <CardHeader>
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center shadow-lg">
@@ -518,14 +530,14 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                         </div>
                                         <div>
                                             <CardTitle className="text-2xl">Register IP Address</CardTitle>
-                                            <CardDescription className="text-base">Daftarkan IP server Anda untuk akses penuh ke platform</CardDescription>
+                                            <CardDescription className="text-base text-muted-foreground">Daftarkan IP server Anda untuk akses penuh ke platform</CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     {ipAlreadyRegistered ? (
-                                        <Alert className="border-green-200 bg-green-50 text-green-800">
-                                            <CheckCircle className="h-5 w-5 text-green-600" />
+                                        <Alert className="border-green-800 bg-green-950/50 text-green-400">
+                                            <CheckCircle className="h-5 w-5 text-green-500" />
                                             <AlertTitle className="text-base">IP Sudah Terdaftar</AlertTitle>
                                             <AlertDescription className="text-sm">
                                                 IP address Anda sudah terdaftar. Tidak perlu daftarkan lagi. Selamat menikmati layanan kami!
@@ -546,13 +558,13 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                                     }}
                                                     placeholder="192.168.1.1"
                                                     disabled={loading}
-                                                    className="h-12 text-base"
+                                                    className="h-12 text-base bg-card/50 border-border/50"
                                                 />
                                             </div>
                                             <Button
                                                 onClick={handleRegister}
                                                 disabled={loading}
-                                                className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
+                                                className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all bg-primary text-primary-foreground hover:bg-primary/90"
                                             >
                                                 {loading ? (
                                                     <>
@@ -573,15 +585,15 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         </TabsContent>
 
                         <TabsContent value="download">
-                            <Card className="border-2">
+                            <Card className="border-2 border-border/50 glass">
                                 <CardHeader>
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500/30 to-green-500/10 flex items-center justify-center shadow-lg">
-                                            <Download className="w-7 h-7 text-green-600" />
+                                            <Download className="w-7 h-7 text-green-400" />
                                         </div>
                                         <div>
                                             <CardTitle className="text-2xl">Download Package</CardTitle>
-                                            <CardDescription className="text-base">Download enterprise package versi terbaru</CardDescription>
+                                            <CardDescription className="text-base text-muted-foreground">Download enterprise package versi terbaru</CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
@@ -595,17 +607,17 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         </TabsContent>
                     </Tabs>
 
-                    {/* CPanel License */}
-                    <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5">
+                    {/* CPanel License - Dark Theme */}
+                    <Card className="border-2 border-primary/20 glass bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500/30 to-red-500/10 flex items-center justify-center shadow-lg">
-                                        <ShoppingCart className="w-7 h-7 text-orange-600" />
+                                        <ShoppingCart className="w-7 h-7 text-orange-400" />
                                     </div>
                                     <div>
                                         <CardTitle className="text-2xl">Buy CPanel License</CardTitle>
-                                        <CardDescription className="text-base font-semibold text-green-600">Rp15.000 - License Resmi</CardDescription>
+                                        <CardDescription className="text-base font-semibold text-green-400">Rp15.000 - License Resmi</CardDescription>
                                     </div>
                                 </div>
                                 <motion.div
@@ -620,13 +632,13 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <motion.a href="https://license.addpackage.dev" target="_blank" whileHover={{ scale: 1.03 }}>
-                                    <Button className="w-full h-12 font-semibold shadow-lg" variant="outline">
+                                    <Button className="w-full h-12 font-semibold shadow-lg border-border/50" variant="outline">
                                         <ExternalLink className="w-5 h-5 mr-2" />
                                         Buy via Website
                                     </Button>
                                 </motion.a>
                                 <motion.a href="https://wa.me/62895403630048" target="_blank" whileHover={{ scale: 1.03 }}>
-                                    <Button className="w-full h-12 font-semibold shadow-lg">
+                                    <Button className="w-full h-12 font-semibold shadow-lg bg-primary text-primary-foreground hover:bg-primary/90">
                                         <MessageCircle className="w-5 h-5 mr-2" />
                                         Buy via WhatsApp
                                     </Button>
@@ -634,23 +646,23 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             </div>
                             <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mt-4">
                                 <span className="flex items-center gap-1.5">
-                                    <CheckCircle className="w-4 h-4 text-green-600" /> Aktivasi Instan
+                                    <CheckCircle className="w-4 h-4 text-green-500" /> Aktivasi Instan
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <CheckCircle className="w-4 h-4 text-green-600" /> License Resmi
+                                    <CheckCircle className="w-4 h-4 text-green-500" /> License Resmi
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <CheckCircle className="w-4 h-4 text-green-600" /> Support 24/7
+                                    <CheckCircle className="w-4 h-4 text-green-500" /> Support 24/7
                                 </span>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* IP List */}
+                    {/* IP List - Dark Theme */}
                     <IPListCard ips={registeredIPs} loading={loading} />
 
-                    {/* Bug Report */}
-                    <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 dark:from-orange-950/30 dark:via-red-950/30 dark:to-pink-950/30">
+                    {/* Bug Report - Dark Theme */}
+                    <Card className="border-2 border-orange-800/50 glass bg-gradient-to-br from-orange-950/30 via-red-950/30 to-pink-950/30">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-xl">
                                 <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
@@ -658,18 +670,18 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                 </motion.div>
                                 Ada Bug? Silahkan Chat Owner
                             </CardTitle>
-                            <CardDescription>Support cepat via WhatsApp atau Telegram</CardDescription>
+                            <CardDescription className="text-muted-foreground">Support cepat via WhatsApp atau Telegram</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
                                 <motion.a href="https://wa.me/6287767867841" target="_blank" whileHover={{ scale: 1.03 }}>
-                                    <Button className="w-full h-12 font-semibold shadow-lg" variant="outline">
+                                    <Button className="w-full h-12 font-semibold shadow-lg border-border/50" variant="outline">
                                         <Send className="w-5 h-5 mr-2" />
                                         WhatsApp Support
                                     </Button>
                                 </motion.a>
                                 <motion.a href="https://t.me/ndradevid" target="_blank" whileHover={{ scale: 1.03 }}>
-                                    <Button className="w-full h-12 font-semibold shadow-lg" variant="outline">
+                                    <Button className="w-full h-12 font-semibold shadow-lg border-border/50" variant="outline">
                                         <MessageCircle className="w-5 h-5 mr-2" />
                                         Telegram Support
                                     </Button>
@@ -680,8 +692,8 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                 </div>
             </main>
 
-            {/* Footer */}
-            <footer className="border-t bg-muted/40 mt-20 py-12 relative z-10">
+            {/* Footer - Dark Theme */}
+            <footer className="border-t border-border/50 bg-muted/20 mt-20 py-12 relative z-10">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
                         <div className="col-span-2 md:col-span-1">
@@ -720,7 +732,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             </div>
                         ))}
                     </div>
-                    <Separator />
+                    <Separator className="bg-border/50" />
                     <div className="mt-8 text-center text-sm text-muted-foreground">
                         © 2026 NdraDev. All rights reserved.
                     </div>
