@@ -5,7 +5,7 @@ import {
     Server, Download, CheckCircle, Menu, X, Home, Package, FileText,
     Shield, Zap, Globe, ShoppingCart, MessageCircle, ExternalLink,
     Clock, Loader2, TrendingUp, Users, BarChart3, Sparkles, ChevronRight,
-    Code, Database, Cloud, Settings, Send, Bug, Box,
+    Code, Database, Cloud, Settings, Send, Bug, Box, Star, Heart,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -174,6 +174,8 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         { icon: FileText, label: "API Docs", href: "/documentation" },
     ];
 
+    const currentYear = new Date().getFullYear();
+
     return (
         <div className="min-h-screen bg-background relative">
             {/* Background */}
@@ -274,46 +276,185 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                 </div>
             </main>
 
-            {/* Footer */}
-            <footer className="border-t border-border/50 bg-gradient-to-b from-muted/20 to-background mt-16 py-12">
-                <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-                        <div className="col-span-2 md:col-span-1">
-                            <div className="flex items-center gap-2.5 mb-4">
-                                <motion.img src="/logo.png" alt="Logo" className="w-8 h-8" whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }} />
+            {/* Attractive Footer */}
+            <footer className="relative border-t border-border/50 mt-16 overflow-hidden">
+                {/* Background Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-muted/10 to-background" />
+                
+                {/* Decorative Elements */}
+                <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+
+                <div className="container mx-auto px-4 py-12 relative z-10">
+                    {/* Main Footer Content */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
+                        {/* Brand Section */}
+                        <div className="lg:col-span-2">
+                            <motion.div 
+                                className="flex items-center gap-3 mb-4"
+                                whileHover={{ scale: 1.02 }}
+                            >
+                                <motion.img 
+                                    src="/logo.png" 
+                                    alt="Logo" 
+                                    className="w-10 h-10"
+                                    whileHover={{ rotate: 360 }}
+                                    transition={{ duration: 0.6 }}
+                                />
                                 <div>
-                                    <span className="font-bold text-base">NdraDev</span>
+                                    <span className="font-bold text-lg bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">NdraDev</span>
                                     <p className="text-[10px] text-muted-foreground">WHM API Automation</p>
                                 </div>
-                            </div>
-                            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">Professional WHM API automation system for hosting providers. Auto create packages, manage accounts, and streamline your workflow.</p>
+                            </motion.div>
+                            <p className="text-sm text-muted-foreground mb-5 leading-relaxed max-w-md">
+                                Professional WHM API automation system designed for hosting providers. 
+                                Automate package creation, account management, and streamline your entire workflow with our powerful API.
+                            </p>
+                            
+                            {/* Social Links */}
                             <div className="flex gap-3">
-                                <motion.a href="https://github.com/NdraDev" target="_blank" whileHover={{ y: -2 }} className="text-muted-foreground hover:text-foreground transition-colors"><Box className="w-5 h-5" /></motion.a>
-                                <motion.a href="https://t.me/ndradevid" target="_blank" whileHover={{ y: -2 }} className="text-muted-foreground hover:text-foreground transition-colors"><Send className="w-5 h-5" /></motion.a>
-                                <motion.a href="https://wa.me/62895403630048" target="_blank" whileHover={{ y: -2 }} className="text-muted-foreground hover:text-foreground transition-colors"><MessageCircle className="w-5 h-5" /></motion.a>
+                                {[
+                                    { icon: Box, href: "https://github.com/NdraDev", label: "GitHub" },
+                                    { icon: Send, href: "https://t.me/ndradevid", label: "Telegram" },
+                                    { icon: MessageCircle, href: "https://wa.me/62895403630048", label: "WhatsApp" },
+                                ].map((social, i) => (
+                                    <motion.a
+                                        key={social.label}
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        whileHover={{ y: -3, scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/20 transition-all duration-300"
+                                        aria-label={social.label}
+                                    >
+                                        <social.icon className="w-5 h-5" />
+                                    </motion.a>
+                                ))}
+                            </div>
+
+                            {/* Newsletter */}
+                            <div className="mt-6">
+                                <p className="text-xs text-muted-foreground mb-2">Stay updated with latest features</p>
+                                <div className="flex gap-2">
+                                    <Input placeholder="Enter email" className="h-9 text-xs bg-card/50" />
+                                    <Button size="sm" className="h-9 px-4">Subscribe</Button>
+                                </div>
                             </div>
                         </div>
+
+                        {/* Links Sections */}
                         {[
-                            { title: "Product", icon: Package, links: [{ l: "Features", h: "#" }, { l: "API Docs", h: "/documentation" }, { l: "Pricing", h: "/packages" }] },
-                            { title: "Resources", icon: Database, links: [{ l: "Documentation", h: "/documentation" }, { l: "Tutorials", h: "/artikel" }, { l: "Support", h: "#" }] },
-                            { title: "Company", icon: Cloud, links: [{ l: "About", h: "#" }, { l: "Contact", h: "#" }, { l: "Status", h: "#" }] },
-                        ].map((section, i) => (
+                            { 
+                                title: "Product", 
+                                icon: Package,
+                                links: [
+                                    { label: "Features", href: "#" },
+                                    { label: "API Documentation", href: "/documentation" },
+                                    { label: "Pricing", href: "/packages" },
+                                    { label: "Changelog", href: "#" },
+                                ]
+                            },
+                            { 
+                                title: "Resources", 
+                                icon: Database,
+                                links: [
+                                    { label: "Documentation", href: "/documentation" },
+                                    { label: "Tutorials", href: "/artikel" },
+                                    { label: "API Reference", href: "/documentation" },
+                                    { label: "Community", href: "#" },
+                                ]
+                            },
+                            { 
+                                title: "Company", 
+                                icon: Cloud,
+                                links: [
+                                    { label: "About Us", href: "#" },
+                                    { label: "Contact", href: "#" },
+                                    { label: "Status", href: "#" },
+                                    { label: "Partners", href: "#" },
+                                ]
+                            },
+                        ].map((section) => (
                             <div key={section.title}>
-                                <div className="flex items-center gap-2 mb-3">
-                                    <section.icon className="w-4 h-4 text-primary" />
-                                    <h4 className="font-semibold text-xs">{section.title}</h4>
-                                </div>
-                                <ul className="space-y-2">{section.links.map((link, j) => (<li key={link.l}><a href={link.h} className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 group"><ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />{link.l}</a></li>))}</ul>
+                                <motion.div 
+                                    className="flex items-center gap-2 mb-4"
+                                    whileHover={{ x: 3 }}
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                        <section.icon className="w-4 h-4 text-primary" />
+                                    </div>
+                                    <h4 className="font-semibold text-sm">{section.title}</h4>
+                                </motion.div>
+                                <ul className="space-y-2.5">
+                                    {section.links.map((link, i) => (
+                                        <motion.li
+                                            key={link.label}
+                                            initial={{ opacity: 0, x: -10 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: i * 0.1 }}
+                                            viewport={{ once: true }}
+                                        >
+                                            <a 
+                                                href={link.href}
+                                                className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                                            >
+                                                <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity -ml-4 group-hover:ml-0" />
+                                                {link.label}
+                                            </a>
+                                        </motion.li>
+                                    ))}
+                                </ul>
                             </div>
                         ))}
                     </div>
-                    <Separator className="bg-border/50" />
-                    <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p className="text-xs text-muted-foreground">© 2026 NdraDev. WHM API Automation. All rights reserved.</p>
+
+                    {/* Divider */}
+                    <Separator className="bg-border/50 mb-8" />
+
+                    {/* Bottom Bar */}
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>© {currentYear} NdraDev. All rights reserved.</span>
+                            <span className="hidden md:inline">•</span>
+                            <motion.span 
+                                className="flex items-center gap-1"
+                                whileHover={{ scale: 1.05 }}
+                            >
+                                Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> in Indonesia
+                            </motion.span>
+                        </div>
+                        
                         <div className="flex items-center gap-6">
-                            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</a>
-                            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms of Service</a>
-                            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Cookie Policy</a>
+                            {[
+                                { label: "Privacy Policy", href: "#" },
+                                { label: "Terms of Service", href: "#" },
+                                { label: "Cookie Policy", href: "#" },
+                            ].map((link) => (
+                                <a 
+                                    key={link.label}
+                                    href={link.href}
+                                    className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                                >
+                                    {link.label}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Trust Badges */}
+                    <div className="mt-8 pt-8 border-t border-border/30">
+                        <div className="flex flex-wrap items-center justify-center gap-6">
+                            {[
+                                { icon: Shield, text: "Secure API" },
+                                { icon: Zap, text: "99.9% Uptime" },
+                                { icon: Star, text: "500+ Users" },
+                            ].map((badge) => (
+                                <div key={badge.text} className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <badge.icon className="w-4 h-4 text-primary" />
+                                    <span>{badge.text}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
