@@ -28,9 +28,9 @@ import {
     ChevronRight,
     Award,
     Activity,
-    Box,
-    Layers,
     Cloud,
+    Layers,
+    Box,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -40,7 +40,7 @@ import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import { Badge } from "../components/ui/badge";
 import { Progress } from "../components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { Separator } from "../components/ui/separator";
 import { useToast } from "../hooks/use-toast";
 
@@ -57,25 +57,29 @@ export function loader({ context }: Route.LoaderArgs) {
     return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
 }
 
-function AnimatedClouds() {
+function AnimatedBackground() {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            {[...Array(5)].map((_, i) => (
+            {/* Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+            
+            {/* Animated Clouds */}
+            {[...Array(6)].map((_, i) => (
                 <motion.div
                     key={i}
-                    className="absolute opacity-[0.04] dark:opacity-[0.06]"
+                    className="absolute opacity-[0.05] dark:opacity-[0.08]"
                     style={{
-                        top: `${15 + i * 20}%`,
-                        left: `${10 + i * 20}%`,
+                        top: `${10 + i * 18}%`,
+                        left: `${5 + i * 18}%`,
                     }}
                     animate={{
-                        y: [0, -25, 0],
-                        x: [0, 20 * (i % 2 === 0 ? 1 : -1), 0],
-                        scale: [1, 1.1, 1],
+                        y: [0, -30, 0],
+                        x: [0, 25 * (i % 2 === 0 ? 1 : -1), 0],
+                        scale: [1, 1.15, 1],
                     }}
-                    transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 25 + i * 5, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <img src="/cloud.png" alt="" className="w-32 h-32 md:w-40 md:h-40" />
+                    <img src="/cloud.png" alt="" className="w-40 h-40 md:w-52 md:h-52" />
                 </motion.div>
             ))}
         </div>
@@ -87,22 +91,22 @@ function StatCard({ icon: Icon, label, value, trend, delay }: any) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay }}
+            transition={{ duration: 0.6, delay }}
         >
-            <Card>
+            <Card className="relative overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">{label}</CardTitle>
-                    <Icon className="h-4 w-4 text-muted-foreground" />
+                    <Icon className="h-5 w-5 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{value}</div>
+                    <div className="text-3xl font-bold mb-2">{value}</div>
                     {trend && (
-                        <p className="text-xs text-muted-foreground flex items-center mt-1">
+                        <p className="text-xs text-muted-foreground flex items-center">
                             <TrendingUp className="h-3 w-3 mr-1" />
                             {trend} from last month
                         </p>
                     )}
-                    <Progress value={75} className="mt-4" />
+                    <Progress value={75} className="mt-4 h-2" />
                 </CardContent>
             </Card>
         </motion.div>
@@ -112,19 +116,20 @@ function StatCard({ icon: Icon, label, value, trend, delay }: any) {
 function FeatureCard({ icon: Icon, title, description, delay }: any) {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay }}
+            whileHover={{ y: -5, scale: 1.02 }}
         >
-            <Card className="h-full">
-                <CardHeader>
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                        <Icon className="h-6 w-6 text-primary" />
+            <Card className="h-full transition-all duration-300 hover:shadow-lg">
+                <CardHeader className="text-center pb-2">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-3">
+                        <Icon className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-lg">{title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <CardDescription className="text-sm">{description}</CardDescription>
+                    <CardDescription className="text-center text-sm">{description}</CardDescription>
                 </CardContent>
             </Card>
         </motion.div>
@@ -142,48 +147,49 @@ function IPListCard({ ips, loading }: { ips: Array<{ id: number; ip: string; cre
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Server className="w-5 h-5 text-primary" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                            <Server className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                            <CardTitle>IP Server Terdaftar</CardTitle>
+                            <CardTitle className="text-lg">IP Server Terdaftar</CardTitle>
                             <CardDescription>{ips.length} server aktif</CardDescription>
                         </div>
                     </div>
-                    {loading && <Loader2 className="w-5 h-5 animate-spin text-primary" />}
+                    {loading && <Loader2 className="w-6 h-6 animate-spin text-primary" />}
                 </div>
             </CardHeader>
             <CardContent>
                 {ips.length === 0 ? (
-                    <div className="text-center py-8">
-                        <Server className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                        <p className="text-sm text-muted-foreground">Belum ada IP terdaftar</p>
+                    <div className="text-center py-12">
+                        <Server className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                        <p className="text-base font-medium mb-1">Belum ada IP terdaftar</p>
+                        <p className="text-sm text-muted-foreground">Jadilah yang pertama untuk mendaftarkan IP Anda</p>
                     </div>
                 ) : (
-                    <div className="space-y-3 max-h-64 overflow-y-auto">
+                    <div className="space-y-3 max-h-80 overflow-y-auto">
                         {ips.map((item, i) => (
                             <motion.div
                                 key={item.id}
-                                initial={{ opacity: 0, x: -10 }}
+                                initial={{ opacity: 0, x: -15 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: i * 0.05 }}
-                                className="flex items-center justify-between p-3 rounded-md border bg-card hover:bg-accent/50 transition-colors"
+                                className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-all duration-200"
                             >
-                                <div className="flex items-center gap-3">
-                                    <Avatar className="h-9 w-9">
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="h-12 w-12">
                                         <AvatarFallback className="bg-primary/10">
-                                            <Server className="w-4 h-4 text-primary" />
+                                            <Server className="w-5 h-5 text-primary" />
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <p className="font-mono text-sm font-medium">{maskIP(item.ip)}</p>
+                                        <p className="font-mono text-base font-semibold">{maskIP(item.ip)}</p>
                                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                                             <Clock className="w-3 h-3" />
-                                            {new Date(item.created_at).toLocaleDateString("id-ID")}
+                                            {new Date(item.created_at).toLocaleDateString("id-ID", { year: 'numeric', month: 'long', day: 'numeric' })}
                                         </p>
                                     </div>
                                 </div>
-                                <Badge variant="secondary" className="gap-1">
+                                <Badge variant="secondary" className="gap-1 px-3 py-1">
                                     <CheckCircle className="w-3 h-3" />
                                     Active
                                 </Badge>
@@ -194,9 +200,9 @@ function IPListCard({ ips, loading }: { ips: Array<{ id: number; ip: string; cre
             </CardContent>
             {ips.length > 0 && (
                 <CardFooter>
-                    <Button variant="outline" className="w-full" asChild>
+                    <Button variant="outline" className="w-full group" asChild>
                         <a href="/ip-server-terdaftar">
-                            View All <ChevronRight className="w-4 h-4 ml-2" />
+                            View All Servers <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </a>
                     </Button>
                 </CardFooter>
@@ -221,11 +227,8 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         return () => clearInterval(interval);
     }, []);
 
-    // Auto-hide alert after 3 seconds
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowAlert(false);
-        }, 3000);
+        const timer = setTimeout(() => setShowAlert(false), 3000);
         return () => clearTimeout(timer);
     }, []);
 
@@ -302,7 +305,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
     };
 
     const features = [
-        { icon: Shield, title: "Enterprise Security", desc: "Keamanan tingkat enterprise untuk data Anda" },
+        { icon: Shield, title: "Enterprise Security", desc: "Keamanan tingkat enterprise untuk melindungi data Anda" },
         { icon: Zap, title: "Lightning Fast", desc: "Performa tinggi dengan response time minimal" },
         { icon: Globe, title: "Global Access", desc: "Akses dari mana saja dengan infrastruktur global" },
         { icon: Award, title: "Industry Standard", desc: "Mengikuti standar industri terbaik" },
@@ -318,16 +321,16 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
     return (
         <div className="min-h-screen relative bg-background">
-            <AnimatedClouds />
+            <AnimatedBackground />
 
-            {/* Alert Banner - Auto-hide after 3s */}
+            {/* Alert Banner */}
             <AnimatePresence>
                 {showAlert && (
                     <motion.div
                         initial={{ opacity: 0, y: -100 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -100 }}
-                        className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+                        className="fixed top-0 left-0 right-0 z-50 border-b bg-gradient-to-r from-primary via-primary/90 to-primary text-primary-foreground shadow-lg"
                     >
                         <div className="container mx-auto px-4 py-3">
                             <div className="flex items-center justify-between">
@@ -336,11 +339,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                         <Sparkles className="w-5 h-5" />
                                     </motion.div>
                                     <div>
-                                        <p className="text-sm font-medium">Add Package System V5</p>
-                                        <p className="text-xs text-muted-foreground">Platform manajemen IP profesional</p>
+                                        <p className="text-sm font-semibold">Add Package System V5</p>
+                                        <p className="text-xs opacity-90">Platform manajemen IP profesional</p>
                                     </div>
                                 </div>
-                                <Button variant="ghost" size="sm" onClick={() => setShowAlert(false)} className="h-8">
+                                <Button variant="ghost" size="sm" onClick={() => setShowAlert(false)} className="h-8 text-primary-foreground hover:bg-primary-foreground/20">
                                     <X className="w-4 h-4" />
                                 </Button>
                             </div>
@@ -353,7 +356,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             <motion.header
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className={`sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${showAlert ? "mt-[52px]" : ""}`}
+                className={`sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm ${showAlert ? "mt-[52px]" : ""}`}
             >
                 <div className="container mx-auto px-4">
                     <div className="flex h-16 items-center justify-between">
@@ -362,13 +365,13 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                 <motion.img 
                                     src="/logo.png" 
                                     alt="Logo" 
-                                    className="w-8 h-8 md:w-10 md:h-10"
+                                    className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-md"
                                     whileHover={{ rotate: 360 }}
                                     transition={{ duration: 0.6 }}
                                 />
-                                <div className="hidden md:block">
-                                    <span className="text-lg font-bold">NdraDev</span>
-                                    <p className="text-xs text-muted-foreground">Enterprise Solutions</p>
+                                <div>
+                                    <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">NdraDev</span>
+                                    <p className="text-xs text-muted-foreground font-medium">Enterprise Solutions</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -382,8 +385,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             <SheetContent side="right" className="w-80">
                                 <SheetHeader>
                                     <SheetTitle className="flex items-center gap-3">
-                                        <img src="/logo.png" alt="Logo" className="w-10 h-10" />
-                                        NdraDev
+                                        <img src="/logo.png" alt="Logo" className="w-12 h-12" />
+                                        <div>
+                                            <span className="block text-xl font-bold">NdraDev</span>
+                                            <span className="text-xs text-muted-foreground">Enterprise Solutions</span>
+                                        </div>
                                     </SheetTitle>
                                     <SheetDescription>
                                         Platform manajemen IP profesional
@@ -395,7 +401,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                             key={item.label}
                                             href={item.href}
                                             onClick={() => setSidebarOpen(false)}
-                                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent transition-colors"
+                                            className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors"
                                         >
                                             <item.icon className="w-5 h-5 text-muted-foreground" />
                                             <span className="font-medium">{item.label}</span>
@@ -410,73 +416,87 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                 <a
                                     key={item.label}
                                     href={item.href}
-                                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
                                 >
                                     {item.label}
+                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
                                 </a>
                             ))}
                         </nav>
-
-                        {/* Removed Sign In / Get Started buttons */}
                     </div>
                 </div>
             </motion.header>
 
             {/* Main Content */}
-            <main className="container mx-auto px-4 py-8 relative z-10">
-                <div className="max-w-7xl mx-auto space-y-8">
-                    {/* Hero Section with Vector Asset */}
+            <main className="container mx-auto px-4 py-12 relative z-10">
+                <div className="max-w-7xl mx-auto space-y-12">
+                    {/* Hero Section with Prominent Vector Asset */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="space-y-4 text-center"
+                        className="space-y-6 text-center"
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.5 }}
+                            initial={{ scale: 0.8, opacity: 0, rotate: -180 }}
+                            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                            transition={{ duration: 0.8, type: "spring", stiffness: 150 }}
                             className="relative inline-block"
                         >
+                            {/* Glow Effect */}
                             <motion.div
                                 animate={{ rotate: 360 }}
-                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-full blur-xl"
+                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-0 bg-gradient-to-r from-primary/20 via-purple-500/20 to-pink-500/20 rounded-full blur-2xl"
                             />
-                            <img 
+                            
+                            {/* Vector Image */}
+                            <motion.img 
                                 src="/vector.png" 
-                                alt="Vector" 
-                                className="relative w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto object-contain"
+                                alt="Hero" 
+                                className="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 mx-auto object-contain drop-shadow-2xl"
+                                animate={{ 
+                                    y: [0, -15, 0],
+                                    rotate: [0, 5, -5, 0]
+                                }}
+                                transition={{ 
+                                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                                    rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                                }}
                             />
                         </motion.div>
 
-                        <Badge variant="secondary" className="gap-2">
-                            <Sparkles className="w-3 h-3" />
-                            V5.0 Enterprise Edition
+                        <Badge variant="secondary" className="gap-2 px-4 py-1.5 text-sm shadow-md">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            V5.0 Enterprise Edition - Latest Release
                         </Badge>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                            IP Management Platform
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
+                            IP Management
+                            <br />
+                            <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                                Platform
+                            </span>
                         </h1>
-                        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Professional-grade infrastructure for IP registration and server management
+                        <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                            Professional-grade infrastructure for IP registration and server management with enterprise-level security
                         </p>
 
-                        <div className="flex flex-wrap justify-center gap-2">
+                        <div className="flex flex-wrap justify-center gap-2.5">
                             {["IP Registration", "Server Management", "API Integration", "24/7 Support"].map((tag) => (
-                                <Badge key={tag} variant="outline">{tag}</Badge>
+                                <Badge key={tag} variant="outline" className="px-4 py-2 text-sm shadow-sm">{tag}</Badge>
                             ))}
                         </div>
                     </motion.div>
 
                     {/* Stats Section */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <StatCard icon={Server} label="Total Server Terdaftar" value={serverCount} trend="+12%" delay={0.1} />
                         <StatCard icon={Users} label="Active Users" value="500+" trend="+25%" delay={0.2} />
                         <StatCard icon={BarChart3} label="API Requests/Day" value="10K+" trend="+18%" delay={0.3} />
                     </div>
 
-                    {/* Features */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Features Section */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {features.map((feature, i) => (
                             <FeatureCard key={i} {...feature} delay={0.1 + i * 0.1} />
                         ))}
@@ -484,37 +504,37 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
                     {/* Main Content Tabs */}
                     <Tabs defaultValue="register" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="register">Register IP</TabsTrigger>
-                            <TabsTrigger value="download">Download</TabsTrigger>
+                        <TabsList className="grid w-full grid-cols-2 mb-8">
+                            <TabsTrigger value="register" className="text-base py-3">Register IP</TabsTrigger>
+                            <TabsTrigger value="download" className="text-base py-3">Download</TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="register">
-                            <Card>
+                            <Card className="border-2">
                                 <CardHeader>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                                            <Server className="w-6 h-6 text-primary" />
+                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center shadow-lg">
+                                            <Server className="w-7 h-7 text-primary" />
                                         </div>
                                         <div>
-                                            <CardTitle>Register IP Address</CardTitle>
-                                            <CardDescription>Daftarkan IP server Anda untuk akses penuh</CardDescription>
+                                            <CardTitle className="text-2xl">Register IP Address</CardTitle>
+                                            <CardDescription className="text-base">Daftarkan IP server Anda untuk akses penuh ke platform</CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     {ipAlreadyRegistered ? (
-                                        <Alert>
-                                            <CheckCircle className="h-4 w-4 text-green-600" />
-                                            <AlertTitle>IP Sudah Terdaftar</AlertTitle>
-                                            <AlertDescription>
+                                        <Alert className="border-green-200 bg-green-50 text-green-800">
+                                            <CheckCircle className="h-5 w-5 text-green-600" />
+                                            <AlertTitle className="text-base">IP Sudah Terdaftar</AlertTitle>
+                                            <AlertDescription className="text-sm">
                                                 IP address Anda sudah terdaftar. Tidak perlu daftarkan lagi. Selamat menikmati layanan kami!
                                             </AlertDescription>
                                         </Alert>
                                     ) : (
                                         <>
                                             <div className="space-y-2">
-                                                <label htmlFor="ip-input" className="text-sm font-medium">
+                                                <label htmlFor="ip-input" className="text-sm font-semibold">
                                                     IP Address
                                                 </label>
                                                 <Input
@@ -526,21 +546,22 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                                     }}
                                                     placeholder="192.168.1.1"
                                                     disabled={loading}
+                                                    className="h-12 text-base"
                                                 />
                                             </div>
                                             <Button
                                                 onClick={handleRegister}
                                                 disabled={loading}
-                                                className="w-full"
+                                                className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
                                             >
                                                 {loading ? (
                                                     <>
-                                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                                                         Processing...
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                                        <CheckCircle className="w-5 h-5 mr-2" />
                                                         Register IP
                                                     </>
                                                 )}
@@ -552,21 +573,21 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         </TabsContent>
 
                         <TabsContent value="download">
-                            <Card>
+                            <Card className="border-2">
                                 <CardHeader>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                                            <Download className="w-6 h-6 text-primary" />
+                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500/30 to-green-500/10 flex items-center justify-center shadow-lg">
+                                            <Download className="w-7 h-7 text-green-600" />
                                         </div>
                                         <div>
-                                            <CardTitle>Download Package</CardTitle>
-                                            <CardDescription>Download enterprise package terbaru</CardDescription>
+                                            <CardTitle className="text-2xl">Download Package</CardTitle>
+                                            <CardDescription className="text-base">Download enterprise package versi terbaru</CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <Button className="w-full">
-                                        <Download className="w-4 h-4 mr-2" />
+                                    <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg">
+                                        <Download className="w-5 h-5 mr-2" />
                                         Download Now
                                     </Button>
                                 </CardContent>
@@ -575,34 +596,52 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                     </Tabs>
 
                     {/* CPanel License */}
-                    <Card>
+                    <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                                        <ShoppingCart className="w-6 h-6 text-primary" />
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500/30 to-red-500/10 flex items-center justify-center shadow-lg">
+                                        <ShoppingCart className="w-7 h-7 text-orange-600" />
                                     </div>
                                     <div>
-                                        <CardTitle>Buy CPanel License</CardTitle>
-                                        <CardDescription>Rp15.000 - License Resmi</CardDescription>
+                                        <CardTitle className="text-2xl">Buy CPanel License</CardTitle>
+                                        <CardDescription className="text-base font-semibold text-green-600">Rp15.000 - License Resmi</CardDescription>
                                     </div>
                                 </div>
+                                <motion.div
+                                    animate={{ rotate: [0, 15, -15, 0], y: [0, -10, 0] }}
+                                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                                    className="hidden lg:block"
+                                >
+                                    <img src="/vector.png" alt="" className="w-24 h-24 object-contain" />
+                                </motion.div>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <motion.a href="https://license.addpackage.dev" target="_blank" whileHover={{ scale: 1.02 }}>
-                                    <Button className="w-full" variant="outline">
-                                        <ExternalLink className="w-4 h-4 mr-2" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <motion.a href="https://license.addpackage.dev" target="_blank" whileHover={{ scale: 1.03 }}>
+                                    <Button className="w-full h-12 font-semibold shadow-lg" variant="outline">
+                                        <ExternalLink className="w-5 h-5 mr-2" />
                                         Buy via Website
                                     </Button>
                                 </motion.a>
-                                <motion.a href="https://wa.me/62895403630048" target="_blank" whileHover={{ scale: 1.02 }}>
-                                    <Button className="w-full">
-                                        <MessageCircle className="w-4 h-4 mr-2" />
+                                <motion.a href="https://wa.me/62895403630048" target="_blank" whileHover={{ scale: 1.03 }}>
+                                    <Button className="w-full h-12 font-semibold shadow-lg">
+                                        <MessageCircle className="w-5 h-5 mr-2" />
                                         Buy via WhatsApp
                                     </Button>
                                 </motion.a>
+                            </div>
+                            <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mt-4">
+                                <span className="flex items-center gap-1.5">
+                                    <CheckCircle className="w-4 h-4 text-green-600" /> Aktivasi Instan
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                    <CheckCircle className="w-4 h-4 text-green-600" /> License Resmi
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                    <CheckCircle className="w-4 h-4 text-green-600" /> Support 24/7
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
@@ -611,25 +650,27 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                     <IPListCard ips={registeredIPs} loading={loading} />
 
                     {/* Bug Report */}
-                    <Card>
+                    <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 dark:from-orange-950/30 dark:via-red-950/30 dark:to-pink-950/30">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Bug className="w-5 h-5" />
+                            <CardTitle className="flex items-center gap-2 text-xl">
+                                <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                                    <Bug className="w-6 h-6" />
+                                </motion.div>
                                 Ada Bug? Silahkan Chat Owner
                             </CardTitle>
                             <CardDescription>Support cepat via WhatsApp atau Telegram</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <motion.a href="https://wa.me/6287767867841" target="_blank" whileHover={{ scale: 1.02 }}>
-                                    <Button className="w-full" variant="outline">
-                                        <Send className="w-4 h-4 mr-2" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
+                                <motion.a href="https://wa.me/6287767867841" target="_blank" whileHover={{ scale: 1.03 }}>
+                                    <Button className="w-full h-12 font-semibold shadow-lg" variant="outline">
+                                        <Send className="w-5 h-5 mr-2" />
                                         WhatsApp Support
                                     </Button>
                                 </motion.a>
-                                <motion.a href="https://t.me/ndradevid" target="_blank" whileHover={{ scale: 1.02 }}>
-                                    <Button className="w-full" variant="outline">
-                                        <MessageCircle className="w-4 h-4 mr-2" />
+                                <motion.a href="https://t.me/ndradevid" target="_blank" whileHover={{ scale: 1.03 }}>
+                                    <Button className="w-full h-12 font-semibold shadow-lg" variant="outline">
+                                        <MessageCircle className="w-5 h-5 mr-2" />
                                         Telegram Support
                                     </Button>
                                 </motion.a>
@@ -642,15 +683,23 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             {/* Footer */}
             <footer className="border-t bg-muted/40 mt-20 py-12 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
                         <div className="col-span-2 md:col-span-1">
                             <div className="flex items-center gap-3 mb-4">
-                                <img src="/logo.png" alt="Logo" className="w-8 h-8" />
-                                <span className="font-bold">NdraDev</span>
+                                <img src="/logo.png" alt="Logo" className="w-10 h-10" />
+                                <span className="font-bold text-lg">NdraDev</span>
                             </div>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-muted-foreground mb-4">
                                 Professional IP management solutions
                             </p>
+                            <div className="flex gap-3">
+                                <a href="https://github.com/NdraDev" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
+                                    <Box className="w-5 h-5" />
+                                </a>
+                                <a href="https://t.me/ndradevid" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
+                                    <Send className="w-5 h-5" />
+                                </a>
+                            </div>
                         </div>
                         {[
                             { title: "Product", links: ["Features", "Pricing", "API", "Docs"] },
@@ -671,7 +720,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             </div>
                         ))}
                     </div>
-                    <Separator className="mt-8" />
+                    <Separator />
                     <div className="mt-8 text-center text-sm text-muted-foreground">
                         © 2026 NdraDev. All rights reserved.
                     </div>
