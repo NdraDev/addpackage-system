@@ -58,11 +58,11 @@ export function loader({ context }: Route.LoaderArgs) {
 function AnimatedBackground() {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950" />
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
             {[...Array(5)].map((_, i) => (
                 <motion.div
                     key={i}
-                    className="absolute opacity-10"
+                    className="absolute opacity-15"
                     style={{
                         top: `${20 * i}%`,
                         left: `${20 * (i % 2) + 10}%`,
@@ -73,7 +73,7 @@ function AnimatedBackground() {
                     }}
                     transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <img src="/cloud.png" alt="" className="w-32 h-32 md:w-48 md:h-48" />
+                    <img src="/cloud.png" alt="" className="w-24 h-24 md:w-32 md:h-32" />
                 </motion.div>
             ))}
         </div>
@@ -87,22 +87,22 @@ function StatCard({ icon: Icon, label, value, trend, delay }: any) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay }}
         >
-            <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="relative overflow-hidden border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
                 <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+                        <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
                             <Icon className="w-6 h-6 text-white" />
                         </div>
                         {trend && (
-                            <Badge variant="secondary" className="bg-green-100 text-green-700">
+                            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200">
                                 <TrendingUp className="w-3 h-3 mr-1" />
                                 {trend}
                             </Badge>
                         )}
                     </div>
                     <div className="space-y-2">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{label}</p>
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{value}</p>
+                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</p>
+                        <p className="text-3xl font-bold text-slate-900 dark:text-white">{value}</p>
                         <Progress value={75} className="h-2" />
                     </div>
                 </CardContent>
@@ -119,15 +119,15 @@ function FeatureCard({ icon: Icon, title, description, delay }: any) {
             transition={{ duration: 0.5, delay }}
             whileHover={{ scale: 1.05, y: -5 }}
         >
-            <Card className="h-full border-0 shadow-lg hover:shadow-2xl transition-all duration-300">
+            <Card className="h-full border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
                 <CardHeader className="text-center pb-2">
-                    <div className="mx-auto mb-4 p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-xl w-fit">
+                    <div className="mx-auto mb-4 p-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl w-fit">
                         <Icon className="w-8 h-8 text-white" />
                     </div>
-                    <CardTitle className="text-xl">{title}</CardTitle>
+                    <CardTitle className="text-xl text-slate-900 dark:text-white">{title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <CardDescription className="text-center text-base">{description}</CardDescription>
+                    <CardDescription className="text-center text-base text-slate-600 dark:text-slate-400">{description}</CardDescription>
                 </CardContent>
             </Card>
         </motion.div>
@@ -141,7 +141,7 @@ function IPLicenseCard({ ips, loading }: { ips: Array<{ id: number; ip: string; 
     };
 
     return (
-        <Card className="border-0 shadow-xl">
+        <Card className="border border-slate-200 dark:border-slate-700 shadow-xl bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -149,18 +149,18 @@ function IPLicenseCard({ ips, loading }: { ips: Array<{ id: number; ip: string; 
                             <Server className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <CardTitle>IP Server Terdaftar</CardTitle>
-                            <CardDescription>{ips.length} server aktif</CardDescription>
+                            <CardTitle className="text-slate-900 dark:text-white">IP Server Terdaftar</CardTitle>
+                            <CardDescription className="text-slate-600 dark:text-slate-400">{ips.length} server aktif</CardDescription>
                         </div>
                     </div>
-                    {loading && <Loader2 className="w-6 h-6 animate-spin text-blue-600" />}
+                    {loading && <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />}
                 </div>
             </CardHeader>
             <CardContent>
                 {ips.length === 0 ? (
                     <div className="text-center py-8">
-                        <Server className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-500">Belum ada IP terdaftar</p>
+                        <Server className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                        <p className="text-slate-500 dark:text-slate-400">Belum ada IP terdaftar</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
@@ -170,21 +170,21 @@ function IPLicenseCard({ ips, loading }: { ips: Array<{ id: number; ip: string; 
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: i * 0.05 }}
-                                className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800"
+                                className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700"
                             >
                                 <Avatar className="h-10 w-10">
-                                    <AvatarFallback className="bg-blue-100 text-blue-600">
+                                    <AvatarFallback className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
                                         <Server className="w-5 h-5" />
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
-                                    <p className="font-mono text-sm font-semibold">{maskIP(item.ip)}</p>
-                                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                                    <p className="font-mono text-sm font-semibold text-slate-900 dark:text-white">{maskIP(item.ip)}</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
                                         <Clock className="w-3 h-3" />
                                         {new Date(item.created_at).toLocaleDateString("id-ID")}
                                     </p>
                                 </div>
-                                <Badge variant="secondary" className="bg-green-100 text-green-700">
+                                <Badge variant="secondary" className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200">
                                     <CheckCircle className="w-3 h-3 mr-1" />
                                     Active
                                 </Badge>
@@ -305,7 +305,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         initial={{ opacity: 0, y: -100 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -100 }}
-                        className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-4 py-4 shadow-2xl"
+                        className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white px-4 py-4 shadow-2xl"
                     >
                         <div className="container mx-auto flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -331,7 +331,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             <motion.header
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className={`sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg border-b ${showAlert ? "mt-16" : ""}`}
+                className={`sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-lg border-b border-slate-200 dark:border-slate-700 ${showAlert ? "mt-16" : ""}`}
             >
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
@@ -375,7 +375,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
                         <nav className="hidden lg:flex items-center gap-6">
                             {["Home", "Packages", "IP Server", "Artikel", "API"].map((item) => (
-                                <a key={item} href="#" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition-colors">
+                                <a key={item} href="#" className="text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">
                                     {item}
                                 </a>
                             ))}
@@ -401,15 +401,15 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             <img src="/vector.png" alt="Vector" className="w-48 h-48 md:w-72 md:h-72 lg:w-96 lg:h-96 mx-auto object-contain drop-shadow-2xl" />
                         </motion.div>
 
-                        <Badge className="px-4 py-2 text-sm" variant="secondary">
+                        <Badge className="px-4 py-2 text-sm bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200" variant="outline">
                             <Sparkles className="w-3 h-3 mr-2" />
                             V5.0 Enterprise Edition
                         </Badge>
 
-                        <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                             IP Management Platform
                         </h1>
-                        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
                             Professional-grade infrastructure for IP registration and server management
                         </p>
 
