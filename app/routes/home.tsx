@@ -5,7 +5,7 @@ import {
     Server, Download, CheckCircle, Menu, X, Home, Package, FileText,
     Shield, Zap, Globe, ShoppingCart, MessageCircle, ExternalLink,
     Clock, Loader2, TrendingUp, Users, BarChart3, Sparkles, ChevronRight,
-    Code, Database, Cloud, Settings,
+    Code, Database, Cloud, Settings, Send, Bug,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -17,22 +17,25 @@ import { Progress } from "../components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { Separator } from "../components/ui/separator";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
+import { Skeleton } from "../components/ui/skeleton";
+import { Spinner } from "../components/ui/spinner";
 import { useToast } from "../hooks/use-toast";
 
 export function meta({}: Route.MetaArgs) {
     return [
         { title: "WHM API Automation - Add Package System V5 | Auto Create cPanel Accounts" },
-        { name: "description", content: "Professional WHM API automation system for auto add package, create cPanel accounts, install LiteSpeed, SMTP integration. Script addpkg addpackage automation tools for WHM/cPanel hosting providers." },
-        { name: "keywords", content: "whm api, addpackage, addpkg, addpack, script addpkg, auto install litespeed, whm api create account, smtp whm api, whm api automation, whmcpanel, cpanel automation, whm package creator, hosting automation, whm api terintegrasi, auto whm tools" },
+        { name: "description", content: "Professional WHM API automation system for auto add package, create cPanel accounts, install LiteSpeed, SMTP integration. Script addpkg addpackage automation tools." },
+        { name: "keywords", content: "whm api, addpackage, addpkg, addpack, script addpkg, auto install litespeed, whm api create account, smtp whm api, whm api automation, whmcpanel, cpanel automation, whm package creator, hosting automation" },
         { name: "author", content: "NdraDev" },
         { name: "robots", content: "index, follow" },
         { property: "og:type", content: "website" },
         { property: "og:url", content: "https://addpackage.dev" },
         { property: "og:title", content: "WHM API Automation - Add Package System V5" },
-        { property: "og:description", content: "Automated WHM API system for package creation, account management, LiteSpeed installation, and SMTP integration" },
+        { property: "og:description", content: "Automated WHM API system for package creation and account management" },
         { property: "twitter:card", content: "summary_large_image" },
-        { property: "twitter:title", content: "WHM API Automation - Add Package System V5" },
-        { property: "twitter:description", content: "Professional WHM automation tools for hosting providers" },
+        { property: "twitter:title", content: "WHM API Automation V5" },
+        { property: "twitter:description", content: "Professional WHM automation tools" },
     ];
 }
 
@@ -40,7 +43,7 @@ export function loader({ context }: Route.LoaderArgs) {
     return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
 }
 
-function StatCard({ icon: Icon, label, value, trend, delay }: any) {
+function StatCard({ icon: Icon, label, value, trend, delay, loading }: any) {
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay }}>
             <Card className="glass">
@@ -49,7 +52,11 @@ function StatCard({ icon: Icon, label, value, trend, delay }: any) {
                     <Icon className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{value}</div>
+                    {loading ? (
+                        <Skeleton className="h-8 w-20 mb-2" />
+                    ) : (
+                        <div className="text-2xl font-bold">{value}</div>
+                    )}
                     {trend && <p className="text-xs text-muted-foreground flex items-center mt-1"><TrendingUp className="h-3 w-3 mr-1" />{trend}</p>}
                     <Progress value={75} className="mt-3 h-1.5" />
                 </CardContent>
@@ -78,19 +85,33 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [serverCount, setServerCount] = useState(0);
     const [registeredIPs, setRegisteredIPs] = useState<any[]>([]);
+    const [statsLoading, setStatsLoading] = useState(true);
     const [showAlert, setShowAlert] = useState(true);
     const [ipRegistered, setIpRegistered] = useState(false);
     const { toast } = useToast();
 
-    useEffect(() => { fetchStats(); const i = setInterval(fetchStats, 10000); return () => clearInterval(i); }, []);
-    useEffect(() => { const t = setTimeout(() => setShowAlert(false), 3000); return () => clearTimeout(t); }, []);
+    useEffect(() => { 
+        fetchStats(); 
+        const i = setInterval(fetchStats, 10000); 
+        return () => clearInterval(i); 
+    }, []);
+
+    useEffect(() => { 
+        const t = setTimeout(() => setShowAlert(false), 3000); 
+        return () => clearTimeout(t); 
+    }, []);
 
     const fetchStats = async () => {
+        setStatsLoading(true);
         try {
             const res = await fetch("/api/ip/list");
             const data = await res.json();
-            if (data.success) { setServerCount(data.total || 0); setRegisteredIPs(data.data || []); }
+            if (data.success) { 
+                setServerCount(data.total || 0); 
+                setRegisteredIPs(data.data || []); 
+            }
         } catch (e) { console.error(e); }
+        finally { setStatsLoading(false); }
     };
 
     const validateIP = (ip: string) => /^(\d{1,3}\.){3}\d{1,3}$/.test(ip) && ip.split(".").map(Number).every(n => n >= 0 && n <= 255);
@@ -102,16 +123,34 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         try {
             const check = await fetch(`/api/ip/check/${encodeURIComponent(ip.trim())}`);
             const checkData = await check.json();
-            if (checkData.registered) { setIpRegistered(true); toast({ title: "IP Terdaftar", description: "IP sudah terdaftar. Selamat menikmati!" }); return; }
+            if (checkData.registered) { 
+                setIpRegistered(true); 
+                toast({ title: "IP Terdaftar", description: "IP sudah terdaftar. Selamat menikmati!" }); 
+                return; 
+            }
             
             setLoading(true);
-            const res = await fetch("/api/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ip: ip.trim() }) });
+            const res = await fetch("/api/register", { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify({ ip: ip.trim() }) 
+            });
             const data = await res.json();
-            if (data.success) { toast({ title: "Berhasil!", description: "IP terdaftar" }); setIp(""); fetchStats(); }
-            else if (data.error?.includes("already")) { setIpRegistered(true); toast({ title: "IP Terdaftar", description: "IP sudah ada" }); }
-            else { toast({ variant: "destructive", title: "Gagal", description: data.error }); }
-        } catch { toast({ variant: "destructive", title: "Error", description: "Terjadi kesalahan" }); }
-        finally { setLoading(false); }
+            if (data.success) { 
+                toast({ title: "Berhasil!", description: "IP terdaftar" }); 
+                setIp(""); 
+                fetchStats(); 
+            } else if (data.error?.includes("already")) { 
+                setIpRegistered(true); 
+                toast({ title: "IP Terdaftar", description: "IP sudah ada" }); 
+            } else { 
+                toast({ variant: "destructive", title: "Gagal", description: data.error }); 
+            }
+        } catch { 
+            toast({ variant: "destructive", title: "Error", description: "Terjadi kesalahan" }); 
+        } finally { 
+            setLoading(false); 
+        }
     };
 
     const features = [
@@ -121,15 +160,27 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         { icon: Settings, title: "SMTP Integration", desc: "SMTP WHM API terintegrasi penuh" },
     ];
 
-    const navItems = [{ icon: Home, label: "Home", href: "/" }, { icon: Package, label: "Packages", href: "/packages" }, { icon: Server, label: "IP Server", href: "/ip-server-terdaftar" }, { icon: FileText, label: "API Docs", href: "/documentation" }];
+    const faqs = [
+        { q: "Apa itu WHM API?", a: "WHM API adalah interface untuk automasi manajemen server WHM/cPanel termasuk create account, manage packages, dan konfigurasi server." },
+        { q: "Bagaimana cara menggunakan script addpkg?", a: "Script addpkg dapat dijalankan via API untuk membuat package baru di WHM secara otomatis." },
+        { q: "Apakah support LiteSpeed?", a: "Ya, sistem kami support auto installation LiteSpeed Enterprise melalui API." },
+        { q: "Apakah ada SMTP integration?", a: "Ya, tersedia SMTP integration untuk pengiriman email otomatis dari WHM." },
+    ];
+
+    const navItems = [
+        { icon: Home, label: "Home", href: "/" }, 
+        { icon: Package, label: "Packages", href: "/packages" }, 
+        { icon: Server, label: "IP Server", href: "/ip-server-terdaftar" }, 
+        { icon: FileText, label: "API Docs", href: "/documentation" },
+    ];
 
     return (
         <div className="min-h-screen bg-background relative">
             {/* Background */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-background via-slate-950 to-background" />
-                {[...Array(4)].map((_, i) => (
-                    <motion.div key={i} className="absolute opacity-[0.02]" style={{ top: `${15 + i * 25}%`, left: `${10 + i * 25}%` }} animate={{ y: [0, -20, 0] }} transition={{ duration: 20 + i * 5, repeat: Infinity }}>
+                {[...Array(3)].map((_, i) => (
+                    <motion.div key={i} className="absolute opacity-[0.02]" style={{ top: `${20 + i * 30}%`, left: `${15 + i * 25}%` }} animate={{ y: [0, -20, 0] }} transition={{ duration: 20 + i * 5, repeat: Infinity }}>
                         <img src="/cloud.png" alt="" className="w-32 h-32 md:w-40 md:h-40" />
                     </motion.div>
                 ))}
@@ -184,7 +235,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                     </motion.div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4"><StatCard icon={Server} label="Servers Registered" value={serverCount} trend="+12%" delay={0.1} /><StatCard icon={Users} label="Active Users" value="500+" trend="+25%" delay={0.2} /><StatCard icon={BarChart3} label="API Calls/Day" value="10K+" trend="+18%" delay={0.3} /></div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <StatCard icon={Server} label="Servers Registered" value={serverCount} trend="+12%" delay={0.1} loading={statsLoading} />
+                        <StatCard icon={Users} label="Active Users" value="500+" trend="+25%" delay={0.2} loading={statsLoading} />
+                        <StatCard icon={BarChart3} label="API Calls/Day" value="10K+" trend="+18%" delay={0.3} loading={statsLoading} />
+                    </div>
 
                     {/* Features */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">{features.map((f, i) => (<FeatureCard key={i} {...f} />))}</div>
@@ -196,7 +251,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             <Card className="glass border-2">
                                 <CardHeader><div className="flex items-center gap-3"><div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center"><Server className="w-6 h-6 text-primary" /></div><div><CardTitle className="text-xl">Register IP</CardTitle><CardDescription>Daftarkan IP untuk akses WHM API</CardDescription></div></div></CardHeader>
                                 <CardContent className="space-y-3">
-                                    {ipRegistered ? (<Alert className="border-green-800 bg-green-950/50 text-green-400"><CheckCircle className="h-4 w-4 text-green-500" /><AlertTitle>IP Terdaftar</AlertTitle><AlertDescription>IP sudah terdaftar. Selamat menikmati!</AlertDescription></Alert>) : (<><div className="space-y-1.5"><label className="text-xs font-semibold">IP Address</label><Input value={ip} onChange={(e) => { setIp(e.target.value); setIpRegistered(false); }} placeholder="192.168.1.1" disabled={loading} className="h-10 text-sm" /></div><Button onClick={handleRegister} disabled={loading} className="w-full h-10 text-sm">{loading ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>) : (<><CheckCircle className="w-4 h-4 mr-2" />Register</>)}</Button></>)}
+                                    {ipRegistered ? (<Alert className="border-green-800 bg-green-950/50 text-green-400"><CheckCircle className="h-4 w-4 text-green-500" /><AlertTitle>IP Terdaftar</AlertTitle><AlertDescription>IP sudah terdaftar. Selamat menikmati!</AlertDescription></Alert>) : (<><div className="space-y-1.5"><label className="text-xs font-semibold">IP Address</label><Input value={ip} onChange={(e) => { setIp(e.target.value); setIpRegistered(false); }} placeholder="192.168.1.1" disabled={loading} className="h-10 text-sm" /></div><Button onClick={handleRegister} disabled={loading} className="w-full h-10 text-sm">{loading ? (<><Spinner size="sm" className="mr-2" />Processing...</>) : (<><CheckCircle className="w-4 h-4 mr-2" />Register</>)}</Button></>)}
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -208,8 +263,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                     {/* CPanel License */}
                     <Card className="glass border-2 border-primary/20"><CardHeader><div className="flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center"><ShoppingCart className="w-6 h-6 text-orange-400" /></div><div><CardTitle className="text-xl">CPanel License</CardTitle><CardDescription className="text-green-400 font-semibold">Rp15.000</CardDescription></div></div></div></CardHeader><CardContent><div className="grid grid-cols-2 gap-3"><a href="https://license.addpackage.dev" target="_blank"><Button variant="outline" className="w-full h-10 text-xs border-border/50"><ExternalLink className="w-3.5 h-3.5 mr-1.5" />Website</Button></a><a href="https://wa.me/62895403630048" target="_blank"><Button className="w-full h-10 text-xs"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />WhatsApp</Button></a></div></CardContent></Card>
 
+                    {/* FAQ Accordion */}
+                    <Card className="glass"><CardHeader><CardTitle className="text-lg">FAQ - WHM API</CardTitle><CardDescription>Pertanyaan umum tentang automation</CardDescription></CardHeader><CardContent><Accordion type="single" collapsible className="w-full">{faqs.map((faq, i) => (<AccordionItem key={i} value={`item-${i}`}><AccordionTrigger className="text-sm">{faq.q}</AccordionTrigger><AccordionContent className="text-sm">{faq.a}</AccordionContent></AccordionItem>))}</Accordion></CardContent></Card>
+
                     {/* IP List */}
-                    <Card className="glass"><CardHeader><div className="flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center"><Server className="w-5 h-5 text-primary" /></div><div><CardTitle className="text-base">IP Registered</CardTitle><CardDescription className="text-xs">{registeredIPs.length} servers</CardDescription></div></div>{loading && <Loader2 className="w-5 h-5 animate-spin" />}</div></CardHeader><CardContent>{registeredIPs.length === 0 ? (<div className="text-center py-10"><Server className="w-12 h-12 text-muted-foreground mx-auto mb-3" /><p className="text-sm text-muted-foreground">Belum ada IP</p></div>) : (<div className="space-y-2 max-h-60 overflow-y-auto">{registeredIPs.map((item, i) => (<motion.div key={item.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }} className="flex items-center justify-between p-3 rounded-md border bg-card/50"><div className="flex items-center gap-3"><Avatar className="h-8 w-8"><AvatarFallback className="bg-primary/10"><Server className="w-4 h-4" /></AvatarFallback></Avatar><div><p className="font-mono text-xs font-medium">{item.ip.split(".").slice(0, 1).join(".") + ".*.*." + item.ip.split(".").slice(3).join(".")}</p><p className="text-[10px] text-muted-foreground">{new Date(item.created_at).toLocaleDateString("id-ID")}</p></div></div><Badge variant="secondary" className="text-[10px] px-2 py-0.5"><CheckCircle className="w-2.5 h-2.5 mr-1" />Active</Badge></motion.div>))}</div>)}{registeredIPs.length > 0 && (<CardFooter><Button variant="outline" className="w-full text-xs" asChild><a href="/ip-server-terdaftar">View All <ChevronRight className="w-3 h-3 ml-1" /></a></Button></CardFooter>)}</CardContent></Card>
+                    <Card className="glass"><CardHeader><div className="flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center"><Server className="w-5 h-5 text-primary" /></div><div><CardTitle className="text-base">IP Registered</CardTitle><CardDescription className="text-xs">{registeredIPs.length} servers</CardDescription></div></div>{loading && <Spinner size="sm" />}</div></CardHeader><CardContent>{registeredIPs.length === 0 ? (<div className="text-center py-10"><Server className="w-12 h-12 text-muted-foreground mx-auto mb-3" /><p className="text-sm text-muted-foreground">Belum ada IP</p></div>) : (<div className="space-y-2 max-h-60 overflow-y-auto">{registeredIPs.map((item, i) => (<motion.div key={item.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }} className="flex items-center justify-between p-3 rounded-md border bg-card/50"><div className="flex items-center gap-3"><Avatar className="h-8 w-8"><AvatarFallback className="bg-primary/10"><Server className="w-4 h-4" /></AvatarFallback></Avatar><div><p className="font-mono text-xs font-medium">{item.ip.split(".")[0] + ".*.*." + item.ip.split(".")[3]}</p><p className="text-[10px] text-muted-foreground">{new Date(item.created_at).toLocaleDateString("id-ID")}</p></div></div><Badge variant="secondary" className="text-[10px] px-2 py-0.5"><CheckCircle className="w-2.5 h-2.5 mr-1" />Active</Badge></motion.div>))}</div>)}{registeredIPs.length > 0 && (<CardFooter><Button variant="outline" className="w-full text-xs" asChild><a href="/ip-server-terdaftar">View All <ChevronRight className="w-3 h-3 ml-1" /></a></Button></CardFooter>)}</CardContent></Card>
 
                     {/* Bug Report */}
                     <Card className="glass border-orange-800/50"><CardHeader><CardTitle className="flex items-center gap-2 text-base"><Bug className="w-5 h-5" />Ada Bug? Chat Owner</CardTitle><CardDescription className="text-xs">Support via WhatsApp/Telegram</CardDescription></CardHeader><CardContent><div className="grid grid-cols-2 gap-3 max-w-xs mx-auto"><a href="https://wa.me/6287767867841" target="_blank"><Button variant="outline" className="w-full h-9 text-xs"><Send className="w-3.5 h-3.5 mr-1.5" />WhatsApp</Button></a><a href="https://t.me/ndradevid" target="_blank"><Button variant="outline" className="w-full h-9 text-xs"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />Telegram</Button></a></div></CardContent></Card>
@@ -221,5 +279,3 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         </div>
     );
 }
-
-function Bug({ className }: any) { return <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>; }
