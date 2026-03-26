@@ -223,6 +223,14 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
         return () => clearInterval(interval);
     }, []);
 
+    // Auto-hide alert after 3 seconds
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowAlert(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, []);
+
     const fetchServerStats = async () => {
         try {
             const response = await fetch("/api/ip/list");
