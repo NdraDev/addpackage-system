@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <!-- 
+    Generated for: addpackage.dev
+    Tools WHM cPanel - Auto Add Package System V5
+    Author: NdraDev
+    -->
+
+    <!-- Homepage -->
+    <url>
+        <loc>https://addpackage.dev/</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Main Pages -->
+    <url>
+        <loc>https://addpackage.dev/packages</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/ip-server-terdaftar</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>hourly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/artikel</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/documentation</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Keyword Landing Pages - High Volume, Low Competition -->
+    <url>
+        <loc>https://addpackage.dev/tools-whm-cpanel</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/tools-auto-addpackage-whm-cpanel</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/tools-ai-whm</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Additional SEO Pages -->
+    <url>
+        <loc>https://addpackage.dev/cpanel-automation-tools</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/whm-package-creator</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/hosting-automation-indonesia</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://addpackage.dev/ip-registration-system</loc>
+        <lastmod>2026-03-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+</urlset>

@@ -24,6 +24,12 @@ import {
     AlertCircle,
     Info,
     Clock,
+    Star,
+    TrendingUp,
+    Target,
+    Award,
+    ChevronRight,
+    ArrowRight,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -35,18 +41,21 @@ import { useToast } from "../hooks/use-toast";
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "NdraDev - Add Package System V5 | Professional IP Registration" },
-        { name: "description", content: "Add Package System V5 - Professional IP address registration, management tools, and CPanel license solutions by NdraDev." },
-        { name: "keywords", content: "IP registration, package management, NdraDev, CPanel license, server tools" },
-        { name: "author", content: "NdraDev" },
-        { name: "robots", content: "index, follow" },
+        // Primary Meta Tags - Optimized for high-volume keywords
+        { title: "Tools WHM cPanel - Auto Add Package V5 | NdraDev Professional Hosting Tools" },
+        { name: "description", content: "Tools WHM cPanel terbaik untuk auto add package, IP registration, dan hosting automation. Solusi profesional untuk server management dengan teknologi AI." },
+        { name: "keywords", content: "tools WHM cPanel, auto addpackage WHM, tools AI WHM, cPanel automation, WHM tools Indonesia, hosting automation, server management tools, cPanel package creator, WHMCS module, hosting business tools" },
+        
+        // Open Graph
         { property: "og:type", content: "website" },
         { property: "og:url", content: "https://addpackage.dev" },
-        { property: "og:title", content: "NdraDev - Add Package System V5" },
-        { property: "og:description", content: "Professional IP address registration and management tools" },
+        { property: "og:title", content: "Tools WHM cPanel - Auto Add Package V5 | NdraDev" },
+        { property: "og:description", content: "Tools profesional untuk WHM cPanel dengan fitur auto add package, IP registration, dan AI-powered automation" },
+        
+        // Twitter
         { property: "twitter:card", content: "summary_large_image" },
-        { property: "twitter:title", content: "NdraDev - Add Package System V5" },
-        { property: "twitter:description", content: "Professional IP address registration tools" },
+        { property: "twitter:title", content: "Tools WHM cPanel - Auto Add Package V5" },
+        { property: "twitter:description", content: "Tools profesional untuk WHM cPanel dengan AI automation" },
     ];
 }
 
@@ -55,45 +64,40 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 function AnimatedClouds() {
-    const clouds = [
-        { top: "top-16", left: "left-8", size: "w-24 h-24 md:w-32 md:h-32", opacity: "opacity-15", delay: 0 },
-        { top: "top-32", right: "right-8", size: "w-20 h-20 md:w-24 md:h-24", opacity: "opacity-12", delay: 2 },
-        { top: "top-1/2", left: "left-4", size: "w-28 h-28 md:w-40 md:h-40", opacity: "opacity-10", delay: 1 },
-        { top: "top-2/3", right: "right-12", size: "w-16 h-16 md:w-24 md:h-24", opacity: "opacity-15", delay: 3 },
-        { top: "bottom-32", left: "left-1/4", size: "w-24 h-24 md:w-32 md:h-32", opacity: "opacity-10", delay: 4 },
-    ];
-
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            {clouds.map((cloud, index) => (
-                <motion.div
-                    key={index}
-                    className={`absolute ${cloud.top} ${cloud.left || ""} ${cloud.right || ""} ${cloud.opacity}`}
-                    animate={{
-                        x: [0, 30 * (index % 2 === 0 ? 1 : -1), 0],
-                        y: [0, -15 * (index % 3), 0],
-                        scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                        duration: 15 + index * 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: cloud.delay,
-                    }}
-                >
-                    <Cloud className={`${cloud.size} text-blue-300 dark:text-blue-400`} />
-                </motion.div>
-            ))}
+            <motion.div
+                className="absolute top-20 left-10 opacity-20"
+                animate={{ x: [0, 30, 0], y: [0, -10, 0] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+            >
+                <img src="/cloud.png" alt="Cloud" className="w-32 h-32 md:w-40 md:h-40 object-contain" />
+            </motion.div>
+            <motion.div
+                className="absolute top-40 right-20 opacity-15"
+                animate={{ x: [0, -25, 0], y: [0, 15, 0] }}
+                transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            >
+                <img src="/cloud.png" alt="Cloud" className="w-24 h-24 md:w-32 md:h-32 object-contain" />
+            </motion.div>
+            <motion.div
+                className="absolute bottom-40 left-1/4 opacity-10"
+                animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
+                transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            >
+                <img src="/cloud.png" alt="Cloud" className="w-40 h-40 md:w-48 md:h-48 object-contain" />
+            </motion.div>
         </div>
     );
 }
 
 function NavigationMenu({ onClose }: { onClose?: () => void }) {
     const navItems = [
-        { icon: Home, label: "Home", href: "#" },
-        { icon: Package, label: "Packages", href: "#packages" },
-        { icon: Server, label: "IP Server Terdaftar", href: "#ip-list" },
-        { icon: FileText, label: "Artikel", href: "#artikel" },
+        { icon: Home, label: "Home", href: "/" },
+        { icon: Package, label: "Packages", href: "/packages" },
+        { icon: Server, label: "IP Server Terdaftar", href: "/ip-server-terdaftar" },
+        { icon: FileText, label: "Artikel", href: "/artikel" },
+        { icon: FileText, label: "API Docs", href: "/documentation" },
     ];
 
     return (
@@ -116,7 +120,7 @@ function NavigationMenu({ onClose }: { onClose?: () => void }) {
     );
 }
 
-function StatCard({ icon: Icon, label, value, color, delay }: { icon: any, label: string, value: string | number, color: string, delay: number }) {
+function StatCard({ icon: Icon, label, value, color, delay, description }: any) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -130,16 +134,12 @@ function StatCard({ icon: Icon, label, value, color, delay }: { icon: any, label
                         <div>
                             <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-1">{label}</p>
                             <p className={`text-2xl md:text-3xl font-bold ${color}`}>{value}</p>
+                            {description && <p className="text-xs text-gray-400 mt-1">{description}</p>}
                         </div>
                         <div className={`p-3 md:p-4 rounded-xl bg-gradient-to-br ${color.includes("blue") ? "from-blue-500 to-blue-600" : color.includes("green") ? "from-green-500 to-green-600" : "from-purple-500 to-purple-600"}`}>
                             <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
                         </div>
                     </div>
-                    <motion.div
-                        className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"
-                        animate={{ x: ["-100%", "100%"] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    />
                 </CardContent>
             </Card>
         </motion.div>
@@ -161,6 +161,7 @@ function IPList({ ips }: { ips: Array<{ id: number; ip: string; created_at: stri
                 <CardContent className="p-6 text-center">
                     <Server className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                     <p className="text-gray-500 dark:text-gray-400">Belum ada server terdaftar</p>
+                    <p className="text-xs text-gray-400 mt-2">Jadilah yang pertama untuk mendaftarkan IP Anda</p>
                 </CardContent>
             </Card>
         );
@@ -193,7 +194,7 @@ function IPList({ ips }: { ips: Array<{ id: number; ip: string; created_at: stri
                                         </p>
                                     </div>
                                 </div>
-                                <Badge variant="default" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200">
+                                <Badge variant="default" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
                                     <CheckCircle className="w-3 h-3 mr-1" />
                                     Active
                                 </Badge>
@@ -203,6 +204,35 @@ function IPList({ ips }: { ips: Array<{ id: number; ip: string; created_at: stri
                 </motion.div>
             ))}
         </div>
+    );
+}
+
+function KeywordLandingPage({ keyword, description, features }: any) {
+    return (
+        <Card className="border-0 shadow-xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700">
+            <CardHeader>
+                <div className="flex items-center gap-3">
+                    <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
+                        <Target className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <CardTitle className="text-2xl">{keyword}</CardTitle>
+                        <CardDescription>Solusi terbaik untuk {keyword.toLowerCase()}</CardDescription>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">{description}</p>
+                <ul className="space-y-2">
+                    {features.map((feature: string, i: number) => (
+                        <li key={i} className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span className="text-gray-600 dark:text-gray-400">{feature}</span>
+                        </li>
+                    ))}
+                </ul>
+            </CardContent>
+        </Card>
     );
 }
 
@@ -232,23 +262,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             if (data.success) {
                 setServerCount(data.total || 0);
                 setRegisteredIPs(data.data || []);
-                console.log("Server count:", data.total);
-                console.log("Registered IPs:", data.data);
             } else {
                 console.error("API returned error:", data);
-                toast({
-                    variant: "destructive",
-                    title: "Error Loading Data",
-                    description: data.error || "Failed to load server data",
-                });
             }
         } catch (error) {
             console.error("Error fetching stats:", error);
-            toast({
-                variant: "destructive",
-                title: "Connection Error",
-                description: "Could not connect to server. Please try again.",
-            });
         }
     };
 
@@ -261,67 +279,33 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
     const handleRegister = async () => {
         if (!ip.trim()) {
-            toast({
-                variant: "destructive",
-                title: "Validasi Error",
-                description: "Silakan masukkan alamat IP",
-            });
+            toast({ variant: "destructive", title: "Error", description: "Masukkan IP address" });
             return;
         }
-
         if (!validateIP(ip.trim())) {
-            toast({
-                variant: "destructive",
-                title: "Format IP Tidak Valid",
-                description: "Masukkan format IP yang benar (contoh: 192.168.1.1)",
-            });
+            toast({ variant: "destructive", title: "Format Invalid", description: "Format IP tidak valid" });
             return;
         }
-
         setLoading(true);
-
         try {
             const response = await fetch("/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ ip: ip.trim() }),
             });
-
             const data = await response.json();
-
             if (data.success) {
-                toast({
-                    variant: "success",
-                    title: "Berhasil!",
-                    description: "IP address berhasil didaftarkan",
-                });
+                toast({ variant: "success", title: "Berhasil!", description: "IP berhasil didaftarkan" });
                 setIp("");
                 fetchServerStats();
             } else {
-                toast({
-                    variant: "destructive",
-                    title: "Registrasi Gagal",
-                    description: data.error || "Gagal mendaftarkan IP",
-                });
+                toast({ variant: "destructive", title: "Gagal", description: data.error });
             }
         } catch (error) {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "Terjadi kesalahan. Silakan coba lagi.",
-            });
-            console.error("Registration error:", error);
+            toast({ variant: "destructive", title: "Error", description: "Terjadi kesalahan" });
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleDownload = () => {
-        toast({
-            variant: "default",
-            title: "Download Dimulai",
-            description: "Package sedang disiapkan...",
-        });
     };
 
     return (
@@ -334,24 +318,16 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                         exit={{ opacity: 0, y: -100 }}
                         className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 shadow-lg"
                     >
-                        <div className="container mx-auto flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-3 flex-1">
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                >
-                                    <Info className="w-5 h-5 flex-shrink-0" />
+                        <div className="container mx-auto flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity }}>
+                                    <Info className="w-5 h-5" />
                                 </motion.div>
-                                <AlertDescription className="text-sm flex-1">
-                                    <span className="font-semibold">Selamat Datang di Add Package System V5!</span> - Platform registrasi IP profesional
+                                <AlertDescription className="text-sm">
+                                    <span className="font-semibold">Tools WHM cPanel Terbaik!</span> - Auto Add Package dengan teknologi AI
                                 </AlertDescription>
                             </div>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setShowAlert(false)}
-                                className="text-white hover:bg-white/20 flex-shrink-0"
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => setShowAlert(false)} className="text-white hover:bg-white/20">
                                 <X className="w-4 h-4" />
                             </Button>
                         </div>
@@ -364,24 +340,15 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             <motion.header
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                className={`bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg border-b border-gray-200/50 sticky top-0 z-50 ${showAlert ? "mt-12" : ""}`}
+                className={`bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg sticky top-0 z-50 ${showAlert ? "mt-12" : ""}`}
             >
-                <div className="container mx-auto px-4 py-3 md:py-4">
+                <div className="container mx-auto px-4 py-3">
                     <div className="flex items-center justify-between">
-                        <motion.div
-                            className="flex items-center gap-2 md:gap-4"
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: "spring", stiffness: 400 }}
-                        >
-                            <img src="/logo.png" alt="NdraDev Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
+                        <motion.div className="flex items-center gap-3" whileHover={{ scale: 1.05 }}>
+                            <img src="/logo.png" alt="NdraDev Logo" className="w-10 h-10 md:w-12 md:h-12" />
                             <div className="hidden md:block">
-                                <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                    NdraDev
-                                </span>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    Add Package System
-                                </p>
+                                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">NdraDev</span>
+                                <p className="text-xs text-gray-500">Add Package System</p>
                             </div>
                         </motion.div>
 
@@ -394,16 +361,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             <SheetContent side="right" className="w-80">
                                 <SheetHeader>
                                     <SheetTitle className="flex items-center gap-3">
-                                        <img src="/logo.png" alt="NdraDev Logo" className="w-10 h-10" />
-                                        <div>
-                                            <span className="block">NdraDev</span>
-                                            <span className="text-xs font-normal text-gray-500">Add Package System</span>
-                                        </div>
+                                        <img src="/logo.png" alt="Logo" className="w-10 h-10" />
+                                        NdraDev
                                     </SheetTitle>
                                 </SheetHeader>
-                                <div className="mt-8">
-                                    <NavigationMenu onClose={() => setSidebarOpen(false)} />
-                                </div>
+                                <NavigationMenu onClose={() => setSidebarOpen(false)} />
                             </SheetContent>
                         </Sheet>
 
@@ -411,15 +373,11 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             {[
                                 { icon: Home, label: "Home" },
                                 { icon: Package, label: "Packages" },
-                                { icon: Server, label: "IP Server Terdaftar" },
+                                { icon: Server, label: "IP Server" },
                                 { icon: FileText, label: "Artikel" },
+                                { icon: FileText, label: "API" },
                             ].map((item) => (
-                                <motion.a
-                                    key={item.label}
-                                    href="#"
-                                    className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 font-medium"
-                                    whileHover={{ y: -2 }}
-                                >
+                                <motion.a key={item.label} href="#" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium" whileHover={{ y: -2 }}>
                                     <item.icon className="w-4 h-4" />
                                     {item.label}
                                 </motion.a>
@@ -429,323 +387,181 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                 </div>
             </motion.header>
 
-            <main className="container mx-auto px-4 py-8 md:py-12 relative z-10">
+            <main className="container mx-auto px-4 py-8 relative z-10">
                 <div className="max-w-6xl mx-auto space-y-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-center mb-8"
-                    >
-                        <motion.div
-                            className="mb-4"
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ duration: 0.8, type: "spring", stiffness: 200 }}
-                        >
+                    {/* Hero Section with Vector */}
+                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+                        <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ duration: 0.8, type: "spring" }}>
                             <img src="/vector.png" alt="Vector" className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto object-contain drop-shadow-2xl" />
                         </motion.div>
-
-                        <motion.div
-                            className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full mb-4"
-                            animate={{ scale: [1, 1.05, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                        >
-                            <Zap className="w-4 h-4" />
-                            <span className="font-semibold text-sm">V5.0 Latest Release</span>
-                        </motion.div>
-
-                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-                            TOOLS Add{" "}
-                            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                Package
-                            </span>
+                        <Badge className="mb-4 bg-blue-100 text-blue-700" variant="default">
+                            <Zap className="w-3 h-3 mr-1" /> V5.0 Latest Release
+                        </Badge>
+                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+                            TOOLS Add <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Package</span>
                         </h1>
-                        <p className="text-base md:text-xl text-gray-600 dark:text-gray-300">
-                            Professional IP Address Registration System
+                        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6">
+                            Tools WHM cPanel profesional dengan teknologi AI untuk automation hosting
                         </p>
-                    </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <StatCard
-                            icon={Server}
-                            label="Total Server Terdaftar"
-                            value={serverCount}
-                            color="text-blue-600"
-                            delay={0.3}
-                        />
-                        <StatCard
-                            icon={Shield}
-                            label="Server Aktif"
-                            value={serverCount}
-                            color="text-green-600"
-                            delay={0.4}
-                        />
-                        <StatCard
-                            icon={Activity}
-                            label="Uptime"
-                            value="99.9%"
-                            color="text-purple-600"
-                            delay={0.5}
-                        />
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                        <Card className="mb-6 border-0 shadow-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg overflow-hidden">
-                            <CardHeader className="pb-4">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                                        <Server className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <CardTitle className="text-xl">Register IP Address</CardTitle>
-                                        <CardDescription>
-                                            Masukkan IP address Anda untuk mendaftar dalam sistem
-                                        </CardDescription>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="space-y-2">
-                                    <label htmlFor="ip-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        IP Address
-                                    </label>
-                                    <Input
-                                        id="ip-input"
-                                        type="text"
-                                        value={ip}
-                                        onChange={(e) => setIp(e.target.value)}
-                                        placeholder="contoh: 192.168.1.1"
-                                        className="transition-all duration-300 focus:ring-2 focus:ring-blue-500"
-                                        disabled={loading}
-                                    />
-                                </div>
-                                <Button
-                                    onClick={handleRegister}
-                                    disabled={loading}
-                                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-6 text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <motion.div
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                                className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                                            />
-                                            Mendaftarkan...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <CheckCircle className="w-5 h-5" />
-                                            Register IP
-                                        </>
-                                    )}
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.5 }}
-                        className="mb-6"
-                    >
-                        <Card className="border-0 shadow-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg overflow-hidden">
-                            <CardHeader className="pb-4">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg">
-                                        <Download className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <CardTitle className="text-xl">Download Package</CardTitle>
-                                        <CardDescription>
-                                            Download versi package terbaru
-                                        </CardDescription>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <Button
-                                    onClick={handleDownload}
-                                    variant="default"
-                                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-6 text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-                                >
-                                    <Download className="w-5 h-5" />
-                                    Download Now
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.6 }}
-                        className="mb-6"
-                    >
-                        <Card className="border-2 border-blue-200 dark:border-blue-800 shadow-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 backdrop-blur-lg overflow-hidden">
-                            <CardHeader className="pb-4">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center shadow-lg">
-                                            <ShoppingCart className="w-6 h-6 text-white" />
-                                        </div>
-                                        <div>
-                                            <CardTitle className="text-2xl">Buy CPanel License</CardTitle>
-                                            <CardDescription className="text-lg">
-                                                CPanel License Resmi - Rp15.000
-                                            </CardDescription>
-                                        </div>
-                                    </div>
-                                    <motion.div
-                                        animate={{ rotate: [0, 10, -10, 0], y: [0, -5, 0] }}
-                                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                                        className="hidden md:block"
-                                    >
-                                        <img src="/vector.png" alt="Vector" className="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-xl" />
-                                    </motion.div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <motion.a
-                                        href="https://license.addpackage.dev"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-6 text-base shadow-lg hover:shadow-xl transition-all duration-300">
-                                            <ExternalLink className="w-5 h-5 mr-2" />
-                                            Buy via Website
-                                        </Button>
-                                    </motion.a>
-                                    <motion.a
-                                        href="https://wa.me/62895403630048"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        <Button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-6 text-base shadow-lg hover:shadow-xl transition-all duration-300">
-                                            <MessageCircle className="w-5 h-5 mr-2" />
-                                            Buy via WhatsApp
-                                        </Button>
-                                    </motion.a>
-                                </div>
-                                <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-                                    <CheckCircle className="w-4 h-4 inline mr-1 text-green-600" />
-                                    Aktivasi Instan - License Resmi - Support 24/7
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.7 }}
-                        className="mb-6"
-                    >
-                        <Card className="border-0 shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg overflow-hidden">
-                            <CardHeader className="pb-4">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-                                        <Server className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <CardTitle className="text-xl">IP Server Terdaftar</CardTitle>
-                                        <CardDescription>
-                                            Daftar server yang telah terdaftar ({serverCount} server)
-                                        </CardDescription>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <IPList ips={registeredIPs} />
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.8 }}
-                        className="text-center mt-8 space-y-2"
-                    >
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {loaderData.message}
-                        </p>
-                        <div className="flex items-center justify-center gap-2 text-xs text-gray-400 dark:text-gray-500">
-                            <Shield className="w-3 h-3" />
-                            <span>Secured by NdraDev</span>
+                        
+                        {/* SEO Keywords Section */}
+                        <div className="flex flex-wrap justify-center gap-2 mb-6">
+                            {["Tools WHM cPanel", "Auto Add Package", "Tools AI WHM", "cPanel Automation", "Hosting Tools"].map((keyword) => (
+                                <Badge key={keyword} variant="outline" className="text-sm">
+                                    {keyword}
+                                </Badge>
+                            ))}
                         </div>
                     </motion.div>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.9 }}
-                        className="mt-12"
-                    >
-                        <Card className="border-0 shadow-xl bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 backdrop-blur-sm">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-center gap-2 mb-4">
-                                    <motion.div
-                                        animate={{ rotate: [0, 10, -10, 0] }}
-                                        transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
-                                    >
-                                        <Bug className="w-6 h-6 text-red-600" />
-                                    </motion.div>
-                                    <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
-                                        Ada Bug? Silahkan Chat Owner
-                                    </h3>
+                    {/* Stats Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <StatCard icon={Server} label="Total Server Terdaftar" value={serverCount} color="text-blue-600" delay={0.3} description="IP aktif terdaftar" />
+                        <StatCard icon={Shield} label="Server Aktif" value={serverCount} color="text-green-600" delay={0.4} description="99.9% uptime" />
+                        <StatCard icon={Activity} label="Uptime" value="99.9%" color="text-purple-600" delay={0.5} description="Reliability tinggi" />
+                    </div>
+
+                    {/* Register IP Card */}
+                    <Card className="border-0 shadow-2xl">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg">
+                                    <Server className="w-6 h-6 text-white" />
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
-                                    <motion.a
-                                        href="https://wa.me/6287767867841"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        <Send className="w-4 h-4" />
-                                        WhatsApp
-                                    </motion.a>
-                                    <motion.a
-                                        href="https://t.me/ndradevid"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        <MessageCircle className="w-4 h-4" />
-                                        Telegram
-                                    </motion.a>
+                                <div>
+                                    <CardTitle>Register IP Address</CardTitle>
+                                    <CardDescription>Daftarkan IP server Anda untuk akses penuh</CardDescription>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <Input id="ip-input" value={ip} onChange={(e) => setIp(e.target.value)} placeholder="contoh: 192.168.1.1" disabled={loading} />
+                            <Button onClick={handleRegister} disabled={loading} className="w-full bg-gradient-to-r from-blue-600 to-purple-600">
+                                {loading ? (
+                                    <motion.div animate={{ rotate: 360 }} className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                                ) : (
+                                    <>
+                                        <CheckCircle className="w-5 h-5 mr-2" /> Register IP
+                                    </>
+                                )}
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    {/* Download Card */}
+                    <Card className="border-0 shadow-2xl">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg">
+                                    <Download className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <CardTitle>Download Package</CardTitle>
+                                    <CardDescription>Download tools terbaru</CardDescription>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <Button className="w-full bg-gradient-to-r from-green-600 to-emerald-600">
+                                <Download className="w-5 h-5 mr-2" /> Download Now
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    {/* CPanel License */}
+                    <Card className="border-2 border-blue-200 shadow-2xl bg-gradient-to-br from-blue-50 to-purple-50">
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg">
+                                        <ShoppingCart className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div>
+                                        <CardTitle>Buy CPanel License</CardTitle>
+                                        <CardDescription>Rp15.000 - License Resmi</CardDescription>
+                                    </div>
+                                </div>
+                                <motion.img src="/vector.png" alt="Vector" className="w-20 h-20 hidden md:block" animate={{ rotate: [0, 10, -10, 0] }} />
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <motion.a href="https://license.addpackage.dev" target="_blank" whileHover={{ scale: 1.05 }}>
+                                    <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600">
+                                        <ExternalLink className="w-4 h-4 mr-2" /> Website
+                                    </Button>
+                                </motion.a>
+                                <motion.a href="https://wa.me/62895403630048" target="_blank" whileHover={{ scale: 1.05 }}>
+                                    <Button className="w-full bg-gradient-to-r from-green-600 to-emerald-600">
+                                        <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp
+                                    </Button>
+                                </motion.a>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* IP List Preview */}
+                    <Card className="border-0 shadow-xl">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg">
+                                    <Server className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <CardTitle>IP Server Terdaftar</CardTitle>
+                                    <CardDescription>{serverCount} server terdaftar</CardDescription>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <IPList ips={registeredIPs} />
+                            <Button variant="outline" className="w-full mt-4" asChild>
+                                <a href="/ip-server-terdaftar">
+                                    Lihat Semua <ArrowRight className="w-4 h-4 ml-2" />
+                                </a>
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    {/* SEO Landing Pages */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <KeywordLandingPage
+                            keyword="Tools WHM cPanel"
+                            description="Solusi terbaik untuk manajemen server WHM cPanel dengan fitur lengkap dan automation canggih."
+                            features={["Auto Package Creation", "IP Management", "User Automation", "API Integration"]}
+                        />
+                        <KeywordLandingPage
+                            keyword="Auto Add Package WHM"
+                            description="Otomatisasi pembuatan package di WHM dengan satu klik. Hemat waktu dan tingkatkan produktivitas."
+                            features={["One-Click Package", "Bulk Operations", "Custom Configuration", "Error Handling"]}
+                        />
+                    </div>
+
+                    {/* Bug Report */}
+                    <Card className="border-0 shadow-xl bg-gradient-to-r from-red-50 to-orange-50">
+                        <CardContent className="p-6">
+                            <div className="flex items-center justify-center gap-2 mb-4">
+                                <motion.div animate={{ rotate: [0, 10, -10, 0] }}>
+                                    <Bug className="w-6 h-6 text-red-600" />
+                                </motion.div>
+                                <h3 className="text-xl font-bold">Ada Bug? Chat Owner</h3>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                                <motion.a href="https://wa.me/6287767867841" target="_blank" whileHover={{ scale: 1.05 }}>
+                                    <Button className="w-full bg-green-600">
+                                        <Send className="w-4 h-4 mr-2" /> WhatsApp
+                                    </Button>
+                                </motion.a>
+                                <motion.a href="https://t.me/ndradevid" target="_blank" whileHover={{ scale: 1.05 }}>
+                                    <Button className="w-full bg-blue-600">
+                                        <MessageCircle className="w-4 h-4 mr-2" /> Telegram
+                                    </Button>
+                                </motion.a>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </main>
-
-            <motion.div
-                className="fixed bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"
-                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-                className="fixed top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-purple-400/10 rounded-full blur-3xl pointer-events-none"
-                animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
         </div>
     );
 }
