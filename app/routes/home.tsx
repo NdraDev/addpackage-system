@@ -275,7 +275,49 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             </main>
 
             {/* Footer */}
-            <footer className="border-t bg-muted/20 mt-16 py-10"><div className="container mx-auto px-4"><div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6"><div className="col-span-2 md:col-span-1"><div className="flex items-center gap-2 mb-3"><img src="/logo.png" alt="" className="w-7 h-7" /><span className="font-bold text-sm">NdraDev</span></div><p className="text-xs text-muted-foreground mb-3">WHM API Automation System</p></div>{[{ title: "Product", links: ["Features", "API", "Docs"] }, { title: "Company", links: ["About", "Contact"] }, { title: "Legal", links: ["Privacy", "Terms"] }].map(s => (<div key={s.title}><h4 className="font-semibold mb-2 text-xs">{s.title}</h4><ul className="space-y-1.5">{s.links.map(l => (<li key={l}><a href="#" className="text-xs text-muted-foreground hover:text-foreground">{l}</a></li>))}</ul></div>))}</div><Separator className="bg-border/50" /><p className="mt-6 text-center text-xs text-muted-foreground">© 2026 NdraDev. WHM API Automation.</p></div></footer>
+            <footer className="border-t border-border/50 bg-gradient-to-b from-muted/20 to-background mt-16 py-12">
+                <div className="container mx-auto px-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                        <div className="col-span-2 md:col-span-1">
+                            <div className="flex items-center gap-2.5 mb-4">
+                                <motion.img src="/logo.png" alt="Logo" className="w-8 h-8" whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }} />
+                                <div>
+                                    <span className="font-bold text-base">NdraDev</span>
+                                    <p className="text-[10px] text-muted-foreground">WHM API Automation</p>
+                                </div>
+                            </div>
+                            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">Professional WHM API automation system for hosting providers. Auto create packages, manage accounts, and streamline your workflow.</p>
+                            <div className="flex gap-3">
+                                <motion.a href="https://github.com/NdraDev" target="_blank" whileHover={{ y: -2 }} className="text-muted-foreground hover:text-foreground transition-colors"><Box className="w-5 h-5" /></motion.a>
+                                <motion.a href="https://t.me/ndradevid" target="_blank" whileHover={{ y: -2 }} className="text-muted-foreground hover:text-foreground transition-colors"><Send className="w-5 h-5" /></motion.a>
+                                <motion.a href="https://wa.me/62895403630048" target="_blank" whileHover={{ y: -2 }} className="text-muted-foreground hover:text-foreground transition-colors"><MessageCircle className="w-5 h-5" /></motion.a>
+                            </div>
+                        </div>
+                        {[
+                            { title: "Product", icon: Package, links: [{ l: "Features", h: "#" }, { l: "API Docs", h: "/documentation" }, { l: "Pricing", h: "/packages" }] },
+                            { title: "Resources", icon: Database, links: [{ l: "Documentation", h: "/documentation" }, { l: "Tutorials", h: "/artikel" }, { l: "Support", h: "#" }] },
+                            { title: "Company", icon: Cloud, links: [{ l: "About", h: "#" }, { l: "Contact", h: "#" }, { l: "Status", h: "#" }] },
+                        ].map((section, i) => (
+                            <div key={section.title}>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <section.icon className="w-4 h-4 text-primary" />
+                                    <h4 className="font-semibold text-xs">{section.title}</h4>
+                                </div>
+                                <ul className="space-y-2">{section.links.map((link, j) => (<li key={link.l}><a href={link.h} className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 group"><ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />{link.l}</a></li>))}</ul>
+                            </div>
+                        ))}
+                    </div>
+                    <Separator className="bg-border/50" />
+                    <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <p className="text-xs text-muted-foreground">© 2026 NdraDev. WHM API Automation. All rights reserved.</p>
+                        <div className="flex items-center gap-6">
+                            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</a>
+                            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms of Service</a>
+                            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Cookie Policy</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }
