@@ -35,19 +35,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 				<meta name="apple-mobile-web-app-title" content="NdraDev" />
-				
 				<meta property="og:type" content="website" />
 				<meta property="og:url" content="https://addpackage.dev" />
-				<meta property="og:site_name" content="NdraDev - Add Package System" />
 				<meta property="og:title" content="NdraDev - Add Package System V5" />
-				<meta property="og:description" content="Professional IP registration and management platform" />
-				<meta property="og:image" content="https://addpackage.dev/og-image.png" />
-				
 				<meta property="twitter:card" content="summary_large_image" />
-				<meta property="twitter:url" content="https://addpackage.dev" />
-				<meta property="twitter:title" content="NdraDev - Add Package System V5" />
-				<meta property="twitter:description" content="Professional IP management platform" />
-				
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{
@@ -64,8 +55,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 						}),
 					}}
 				/>
-
-				<Meta />
 				<Links />
 			</head>
 			<body className="min-h-screen bg-background font-sans antialiased">
@@ -100,16 +89,16 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 	}
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+		<div className="min-h-screen flex items-center justify-center bg-background">
 			<div className="text-center space-y-6 p-8">
 				<div className="space-y-2">
 					<img src="/logo.png" alt="NdraDev Logo" className="w-20 h-20 mx-auto mb-4" />
-					<h1 className="text-6xl font-bold text-gray-900">{message}</h1>
-					<p className="text-xl text-gray-600">{details}</p>
+					<h1 className="text-6xl font-bold">{message}</h1>
+					<p className="text-xl text-muted-foreground">{details}</p>
 				</div>
 				<a
 					href="/"
-					className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
+					className="inline-flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md transition-colors"
 				>
 					<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
