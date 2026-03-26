@@ -5,7 +5,7 @@ import {
     Server, Download, CheckCircle, Menu, X, Home, Package, FileText,
     Shield, Zap, Globe, ShoppingCart, MessageCircle, ExternalLink,
     Clock, Loader2, TrendingUp, Users, BarChart3, Sparkles, ChevronRight,
-    Code, Database, Cloud, Settings, Send, Bug,
+    Code, Database, Cloud, Settings, Send, Bug, Box,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
