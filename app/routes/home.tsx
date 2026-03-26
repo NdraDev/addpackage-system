@@ -5,7 +5,7 @@ import {
     Server, Download, CheckCircle, Menu, X, Home, Package, FileText,
     Shield, Zap, Globe, ShoppingCart, MessageCircle, ExternalLink,
     Clock, Loader2, TrendingUp, Users, BarChart3, Sparkles, ChevronRight,
-    Code, Database, Cloud, Settings, Send, Bug, Box, Star, Heart,
+    Code, Database, Cloud, Settings, Send, Bug,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -276,186 +276,21 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                 </div>
             </main>
 
-            {/* Attractive Footer */}
-            <footer className="relative border-t border-border/50 mt-16 overflow-hidden">
-                {/* Background Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-muted/10 to-background" />
-                
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
-
-                <div className="container mx-auto px-4 py-12 relative z-10">
-                    {/* Main Footer Content */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
-                        {/* Brand Section */}
-                        <div className="lg:col-span-2">
-                            <motion.div 
-                                className="flex items-center gap-3 mb-4"
-                                whileHover={{ scale: 1.02 }}
-                            >
-                                <motion.img 
-                                    src="/logo.png" 
-                                    alt="Logo" 
-                                    className="w-10 h-10"
-                                    whileHover={{ rotate: 360 }}
-                                    transition={{ duration: 0.6 }}
-                                />
-                                <div>
-                                    <span className="font-bold text-lg bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">NdraDev</span>
-                                    <p className="text-[10px] text-muted-foreground">WHM API Automation</p>
-                                </div>
-                            </motion.div>
-                            <p className="text-sm text-muted-foreground mb-5 leading-relaxed max-w-md">
-                                Professional WHM API automation system designed for hosting providers. 
-                                Automate package creation, account management, and streamline your entire workflow with our powerful API.
-                            </p>
-                            
-                            {/* Social Links */}
-                            <div className="flex gap-3">
-                                {[
-                                    { icon: Box, href: "https://github.com/NdraDev", label: "GitHub" },
-                                    { icon: Send, href: "https://t.me/ndradevid", label: "Telegram" },
-                                    { icon: MessageCircle, href: "https://wa.me/62895403630048", label: "WhatsApp" },
-                                ].map((social, i) => (
-                                    <motion.a
-                                        key={social.label}
-                                        href={social.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        whileHover={{ y: -3, scale: 1.1 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/20 transition-all duration-300"
-                                        aria-label={social.label}
-                                    >
-                                        <social.icon className="w-5 h-5" />
-                                    </motion.a>
-                                ))}
-                            </div>
-
-                            {/* Newsletter */}
-                            <div className="mt-6">
-                                <p className="text-xs text-muted-foreground mb-2">Stay updated with latest features</p>
-                                <div className="flex gap-2">
-                                    <Input placeholder="Enter email" className="h-9 text-xs bg-card/50" />
-                                    <Button size="sm" className="h-9 px-4">Subscribe</Button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Links Sections */}
-                        {[
-                            { 
-                                title: "Product", 
-                                icon: Package,
-                                links: [
-                                    { label: "Features", href: "#" },
-                                    { label: "API Documentation", href: "/documentation" },
-                                    { label: "Pricing", href: "/packages" },
-                                    { label: "Changelog", href: "#" },
-                                ]
-                            },
-                            { 
-                                title: "Resources", 
-                                icon: Database,
-                                links: [
-                                    { label: "Documentation", href: "/documentation" },
-                                    { label: "Tutorials", href: "/artikel" },
-                                    { label: "API Reference", href: "/documentation" },
-                                    { label: "Community", href: "#" },
-                                ]
-                            },
-                            { 
-                                title: "Company", 
-                                icon: Cloud,
-                                links: [
-                                    { label: "About Us", href: "#" },
-                                    { label: "Contact", href: "#" },
-                                    { label: "Status", href: "#" },
-                                    { label: "Partners", href: "#" },
-                                ]
-                            },
-                        ].map((section) => (
-                            <div key={section.title}>
-                                <motion.div 
-                                    className="flex items-center gap-2 mb-4"
-                                    whileHover={{ x: 3 }}
-                                >
-                                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                                        <section.icon className="w-4 h-4 text-primary" />
-                                    </div>
-                                    <h4 className="font-semibold text-sm">{section.title}</h4>
-                                </motion.div>
-                                <ul className="space-y-2.5">
-                                    {section.links.map((link, i) => (
-                                        <motion.li
-                                            key={link.label}
-                                            initial={{ opacity: 0, x: -10 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: i * 0.1 }}
-                                            viewport={{ once: true }}
-                                        >
-                                            <a 
-                                                href={link.href}
-                                                className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
-                                            >
-                                                <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity -ml-4 group-hover:ml-0" />
-                                                {link.label}
-                                            </a>
-                                        </motion.li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Divider */}
-                    <Separator className="bg-border/50 mb-8" />
-
-                    {/* Bottom Bar */}
+            {/* Footer */}
+            <footer className="border-t border-border/50 mt-16 py-8 bg-muted/20">
+                <div className="container mx-auto px-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span>© {currentYear} NdraDev. All rights reserved.</span>
-                            <span className="hidden md:inline">•</span>
-                            <motion.span 
-                                className="flex items-center gap-1"
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> in Indonesia
-                            </motion.span>
+                        <div className="flex items-center gap-2">
+                            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
+                            <span className="text-sm font-semibold">NdraDev</span>
+                            <span className="text-xs text-muted-foreground">| WHM API Automation</span>
                         </div>
-                        
-                        <div className="flex items-center gap-6">
-                            {[
-                                { label: "Privacy Policy", href: "#" },
-                                { label: "Terms of Service", href: "#" },
-                                { label: "Cookie Policy", href: "#" },
-                            ].map((link) => (
-                                <a 
-                                    key={link.label}
-                                    href={link.href}
-                                    className="text-xs text-muted-foreground hover:text-primary transition-colors"
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <a href="/documentation" className="hover:text-primary transition-colors">API Docs</a>
+                            <a href="/packages" className="hover:text-primary transition-colors">Packages</a>
+                            <a href="https://wa.me/62895403630048" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Contact</a>
                         </div>
-                    </div>
-
-                    {/* Trust Badges */}
-                    <div className="mt-8 pt-8 border-t border-border/30">
-                        <div className="flex flex-wrap items-center justify-center gap-6">
-                            {[
-                                { icon: Shield, text: "Secure API" },
-                                { icon: Zap, text: "99.9% Uptime" },
-                                { icon: Star, text: "500+ Users" },
-                            ].map((badge) => (
-                                <div key={badge.text} className="flex items-center gap-2 text-xs text-muted-foreground">
-                                    <badge.icon className="w-4 h-4 text-primary" />
-                                    <span>{badge.text}</span>
-                                </div>
-                            ))}
-                        </div>
+                        <p className="text-xs text-muted-foreground">© {currentYear} NdraDev. All rights reserved.</p>
                     </div>
                 </div>
             </footer>
