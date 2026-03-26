@@ -26,13 +26,11 @@ import {
     Sparkles,
     ArrowRight,
     ChevronRight,
-    Star,
     Award,
     Activity,
     Box,
     Layers,
-    Settings,
-    LifeBuoy,
+    Cloud,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -59,23 +57,23 @@ export function loader({ context }: Route.LoaderArgs) {
     return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
 }
 
-function AnimatedBackground() {
+function AnimatedClouds() {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-background to-muted/20" />
-            {[...Array(4)].map((_, i) => (
+            {[...Array(5)].map((_, i) => (
                 <motion.div
                     key={i}
-                    className="absolute opacity-[0.03] dark:opacity-[0.05]"
+                    className="absolute opacity-[0.04] dark:opacity-[0.06]"
                     style={{
-                        top: `${25 * i}%`,
-                        left: `${25 * (i % 2) + 12}%`,
+                        top: `${15 + i * 20}%`,
+                        left: `${10 + i * 20}%`,
                     }}
                     animate={{
-                        y: [0, -20, 0],
-                        x: [0, 15 * (i % 2 === 0 ? 1 : -1), 0],
+                        y: [0, -25, 0],
+                        x: [0, 20 * (i % 2 === 0 ? 1 : -1), 0],
+                        scale: [1, 1.1, 1],
                     }}
-                    transition={{ duration: 25 + i * 5, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "easeInOut" }}
                 >
                     <img src="/cloud.png" alt="" className="w-32 h-32 md:w-40 md:h-40" />
                 </motion.div>
@@ -320,9 +318,9 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
     return (
         <div className="min-h-screen relative bg-background">
-            <AnimatedBackground />
+            <AnimatedClouds />
 
-            {/* Alert Banner */}
+            {/* Alert Banner - Auto-hide after 3s */}
             <AnimatePresence>
                 {showAlert && (
                     <motion.div
@@ -361,7 +359,13 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                     <div className="flex h-16 items-center justify-between">
                         <motion.div className="flex items-center gap-4" whileHover={{ scale: 1.02 }}>
                             <div className="flex items-center gap-3">
-                                <img src="/logo.png" alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
+                                <motion.img 
+                                    src="/logo.png" 
+                                    alt="Logo" 
+                                    className="w-8 h-8 md:w-10 md:h-10"
+                                    whileHover={{ rotate: 360 }}
+                                    transition={{ duration: 0.6 }}
+                                />
                                 <div className="hidden md:block">
                                     <span className="text-lg font-bold">NdraDev</span>
                                     <p className="text-xs text-muted-foreground">Enterprise Solutions</p>
@@ -413,12 +417,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             ))}
                         </nav>
 
-                        <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm" className="hidden md:flex">
-                                Sign In
-                            </Button>
-                            <Button size="sm">Get Started</Button>
-                        </div>
+                        {/* Removed Sign In / Get Started buttons */}
                     </div>
                 </div>
             </motion.header>
@@ -426,7 +425,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
             {/* Main Content */}
             <main className="container mx-auto px-4 py-8 relative z-10">
                 <div className="max-w-7xl mx-auto space-y-8">
-                    {/* Hero Section */}
+                    {/* Hero Section with Vector Asset */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -436,8 +435,18 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.5 }}
+                            className="relative inline-block"
                         >
-                            <img src="/vector.png" alt="Vector" className="w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto object-contain" />
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-full blur-xl"
+                            />
+                            <img 
+                                src="/vector.png" 
+                                alt="Vector" 
+                                className="relative w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto object-contain"
+                            />
                         </motion.div>
 
                         <Badge variant="secondary" className="gap-2">
