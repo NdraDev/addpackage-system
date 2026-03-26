@@ -223,14 +223,32 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
     const fetchServerStats = async () => {
         try {
+            console.log("Fetching server stats...");
             const response = await fetch("/api/ip/list");
+            console.log("Response status:", response.status);
             const data = await response.json();
+            console.log("API Response:", data);
+            
             if (data.success) {
                 setServerCount(data.total || 0);
                 setRegisteredIPs(data.data || []);
+                console.log("Server count:", data.total);
+                console.log("Registered IPs:", data.data);
+            } else {
+                console.error("API returned error:", data);
+                toast({
+                    variant: "destructive",
+                    title: "Error Loading Data",
+                    description: data.error || "Failed to load server data",
+                });
             }
         } catch (error) {
             console.error("Error fetching stats:", error);
+            toast({
+                variant: "destructive",
+                title: "Connection Error",
+                description: "Could not connect to server. Please try again.",
+            });
         }
     };
 

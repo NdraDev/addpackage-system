@@ -27,9 +27,9 @@ async function handleAPI(request: Request, env: Env): Promise<Response> {
 		return new Response(null, { headers: corsHeaders });
 	}
 
-	// POST /api/register - Register a new IP
-	if (path === "/api/register" && request.method === "POST") {
-		try {
+	try {
+		// POST /api/register - Register a new IP
+		if (path === "/api/register" && request.method === "POST") {
 			const body = await request.json();
 			const { ip } = body;
 
@@ -91,18 +91,10 @@ async function handleAPI(request: Request, env: Env): Promise<Response> {
 				},
 				{ headers: corsHeaders }
 			);
-		} catch (error) {
-			console.error("Error registering IP:", error);
-			return Response.json(
-				{ success: false, error: "Internal server error" },
-				{ status: 500, headers: corsHeaders }
-			);
 		}
-	}
 
-	// GET /api/ip/check/:ip - Check if an IP is registered
-	if (path.startsWith("/api/ip/check/") && request.method === "GET") {
-		try {
+		// GET /api/ip/check/:ip - Check if an IP is registered
+		if (path.startsWith("/api/ip/check/") && request.method === "GET") {
 			const ip = decodeURIComponent(path.split("/").pop() || "");
 			
 			const result = await env.IP_DB.prepare(
@@ -122,41 +114,64 @@ async function handleAPI(request: Request, env: Env): Promise<Response> {
 					{ headers: corsHeaders }
 				);
 			}
-		} catch (error) {
-			console.error("Error checking IP:", error);
-			return Response.json(
-				{ success: false, error: "Internal server error" },
-				{ status: 500, headers: corsHeaders }
-			);
 		}
-	}
 
-	// GET /api/ip/list - List all registered IPs from D1 Database
-	if (path === "/api/ip/list" && request.method === "GET") {
-		try {
-			const { results } = await env.IP_DB.prepare(
+		// GET /api/ip/list - List all registered IPs from D1 Database
+		if (path === "/api/ip/list" && request.method === "GET") {
+			// First, let's check if the database binding exists
+			if (!env.IP_DB) {
+				console.error("IP_DB binding not found!");
+				return Response.json(
+					{ 
+						success: false, 
+						error: "Database not configured",
+						debug: "IP_DB binding is missing"
+					},
+					{ status: 500, headers: corsHeaders }
+				);
+			}
+
+			// Query the database
+			const stmt = env.IP_DB.prepare(
 				"SELECT id, ip, created_at FROM ip_addresses ORDER BY created_at DESC"
-			)
-				.all();
+			);
+			
+			const response = await stmt.all();
+			
+			console.log("D1 Query Result:", response);
+			console.log("Results:", response.results);
+			console.log("Total:", response.results?.length || 0);
 
 			return Response.json(
-				{ success: true, data: results || [], total: (results || []).length },
+				{ 
+					success: true, 
+					data: response.results || [], 
+					total: response.results?.length || 0,
+					debug: {
+						hasResults: response.results?.length > 0,
+						rawResponse: response
+					}
+				},
 				{ headers: corsHeaders }
 			);
-		} catch (error) {
-			console.error("Error listing IPs:", error);
-			return Response.json(
-				{ success: false, error: "Internal server error" },
-				{ status: 500, headers: corsHeaders }
-			);
 		}
-	}
 
-	// 404 for unknown API routes
-	return Response.json(
-		{ error: "Not found" },
-		{ status: 404, headers: corsHeaders }
-	);
+		// 404 for unknown API routes
+		return Response.json(
+			{ error: "Not found" },
+			{ status: 404, headers: corsHeaders }
+		);
+	} catch (error) {
+		console.error("API Error:", error);
+		return Response.json(
+			{ 
+				success: false, 
+				error: error instanceof Error ? error.message : "Internal server error",
+				stack: error instanceof Error ? error.stack : undefined
+			},
+			{ status: 500, headers: corsHeaders }
+		);
+	}
 }
 
 const requestHandler = createRequestHandler(
@@ -166,16 +181,21 @@ const requestHandler = createRequestHandler(
 
 export default {
 	async fetch(request, env, ctx) {
-		const url = new URL(request.url);
+		try {
+			const url = new URL(request.url);
 
-		// Route API requests to the API handler
-		if (url.pathname.startsWith("/api/")) {
-			return handleAPI(request, env);
+			// Route API requests to the API handler
+			if (url.pathname.startsWith("/api/")) {
+				return handleAPI(request, env);
+			}
+
+			// Route all other requests to React Router
+			return requestHandler(request, {
+				cloudflare: { env, ctx },
+			});
+		} catch (error) {
+			console.error("Worker error:", error);
+			return new Response("Internal Server Error", { status: 500 });
 		}
-
-		// Route all other requests to React Router
-		return requestHandler(request, {
-			cloudflare: { env, ctx },
-		});
 	},
 } satisfies ExportedHandler<Env>;
