@@ -8,7 +8,21 @@
 		"enabled": true
 	},
 	"upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "IP_DB",
+			"database_name": "addpackage-api-ip-db",
+			"database_id": "6d7c503a-e0d4-49d5-8ace-6b9abc4a4c10"
+		}
+	],
 	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Addpackage System Tools By NdraDev"
+		"VALUE_FROM_CLOUDFLARE": "Addpackage System Tools By NdraDev - Production"
+	},
+	"env": {
+		"production": {
+			"vars": {
+				"VALUE_FROM_CLOUDFLARE": "Addpackage System Tools By NdraDev - Live Production"
+			}
+		}
 	}
 }

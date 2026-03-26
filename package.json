@@ -1,23 +1,39 @@
 {
 	"name": "addpackage-system",
-	"description": "Build a full-stack web application with React Router 7.",
+	"description": "Professional IP address registration and management system by NdraDev",
+	"version": "5.0.0",
+	"author": "NdraDev",
+	"license": "MIT",
 	"cloudflare": {
 		"label": "React Router Framework Starter",
 		"products": [
-			"Workers"
+			"Workers",
+			"Pages",
+			"D1"
 		],
 		"categories": [
-			"storage"
+			"storage",
+			"developer-tools"
 		],
 		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/36a99c4a-8919-4e6e-ac9e-e55974407200/public",
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/65455e96-7992-425f-44e4-30f3e7d7f900/preview",
 		"publish": true
 	},
 	"dependencies": {
+		"@radix-ui/react-dialog": "^1.1.15",
+		"@radix-ui/react-label": "^2.1.8",
+		"@radix-ui/react-navigation-menu": "^1.2.14",
+		"@radix-ui/react-slot": "^1.2.4",
+		"@radix-ui/react-toast": "^1.2.15",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"framer-motion": "^12.38.0",
 		"isbot": "5.1.32",
+		"lucide-react": "^1.7.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"react-router": "7.9.6"
+		"react-router": "7.9.6",
+		"tailwind-merge": "^3.5.0"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.15.3",
@@ -32,15 +48,30 @@
 		"vite-tsconfig-paths": "5.1.4",
 		"wrangler": "4.56.0"
 	},
-	"private": true,
+	"private": false,
 	"scripts": {
 		"build": "react-router build",
+		"build:pages": "npm run build && cp -r build/client/* dist/",
 		"cf-typegen": "wrangler types && react-router typegen",
 		"check": "tsc && react-router build && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
+		"deploy:prod": "wrangler deploy --env production",
 		"dev": "react-router dev",
 		"preview": "npm run build && vite preview",
-		"typecheck": "npm run typegen && tsc -b"
+		"typecheck": "npm run typegen && tsc -b",
+		"d1:migrate": "wrangler d1 execute addpackage-api-ip-db --file=sql/001-create-ip-addresses-table.sql"
 	},
-	"type": "module"
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NdraDev/addpackage-system.git"
+	},
+	"keywords": [
+		"ip-registration",
+		"package-management",
+		"cloudflare",
+		"d1-database",
+		"react-router",
+		"ndradev"
+	]
 }

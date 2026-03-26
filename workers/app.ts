@@ -9,13 +9,171 @@ declare module "react-router" {
 	}
 }
 
+// API Handler for IP registration with D1 Database
+async function handleAPI(request: Request, env: Env): Promise<Response> {
+	const url = new URL(request.url);
+	const path = url.pathname;
+
+	// Handle CORS
+	const corsHeaders = {
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+		"Access-Control-Allow-Headers": "Content-Type",
+		"Access-Control-Max-Age": "86400",
+	};
+
+	// Handle preflight
+	if (request.method === "OPTIONS") {
+		return new Response(null, { headers: corsHeaders });
+	}
+
+	// POST /api/register - Register a new IP
+	if (path === "/api/register" && request.method === "POST") {
+		try {
+			const body = await request.json();
+			const { ip } = body;
+
+			if (!ip) {
+				return Response.json(
+					{ success: false, error: "IP address is required" },
+					{ status: 400, headers: corsHeaders }
+				);
+			}
+
+			// Validate IP format
+			const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
+			if (!ipRegex.test(ip)) {
+				return Response.json(
+					{ success: false, error: "Invalid IP address format" },
+					{ status: 400, headers: corsHeaders }
+				);
+			}
+
+			// Additional validation: check each octet is 0-255
+			const octets = ip.split(".").map(Number);
+			if (octets.some((octet) => octet < 0 || octet > 255)) {
+				return Response.json(
+					{ success: false, error: "Invalid IP address: octets must be 0-255" },
+					{ status: 400, headers: corsHeaders }
+				);
+			}
+
+			// Check if IP already exists in D1 Database
+			const existing = await env.IP_DB.prepare(
+				"SELECT id, ip, created_at FROM ip_addresses WHERE ip = ?"
+			)
+				.bind(ip)
+				.first();
+
+			if (existing) {
+				return Response.json(
+					{ success: false, error: "IP address already registered" },
+					{ status: 409, headers: corsHeaders }
+				);
+			}
+
+			// Insert new IP into D1 Database
+			const result = await env.IP_DB.prepare(
+				"INSERT INTO ip_addresses (ip) VALUES (?)"
+			)
+				.bind(ip)
+				.run();
+
+			return Response.json(
+				{
+					success: true,
+					message: "IP registered successfully",
+					data: { 
+						id: result.meta?.last_row_id || 0, 
+						ip, 
+						registered_at: new Date().toISOString() 
+					},
+				},
+				{ headers: corsHeaders }
+			);
+		} catch (error) {
+			console.error("Error registering IP:", error);
+			return Response.json(
+				{ success: false, error: "Internal server error" },
+				{ status: 500, headers: corsHeaders }
+			);
+		}
+	}
+
+	// GET /api/ip/check/:ip - Check if an IP is registered
+	if (path.startsWith("/api/ip/check/") && request.method === "GET") {
+		try {
+			const ip = decodeURIComponent(path.split("/").pop() || "");
+			
+			const result = await env.IP_DB.prepare(
+				"SELECT id, ip, created_at FROM ip_addresses WHERE ip = ?"
+			)
+				.bind(ip)
+				.first();
+
+			if (result) {
+				return Response.json(
+					{ success: true, registered: true, data: result },
+					{ headers: corsHeaders }
+				);
+			} else {
+				return Response.json(
+					{ success: true, registered: false },
+					{ headers: corsHeaders }
+				);
+			}
+		} catch (error) {
+			console.error("Error checking IP:", error);
+			return Response.json(
+				{ success: false, error: "Internal server error" },
+				{ status: 500, headers: corsHeaders }
+			);
+		}
+	}
+
+	// GET /api/ip/list - List all registered IPs from D1 Database
+	if (path === "/api/ip/list" && request.method === "GET") {
+		try {
+			const { results } = await env.IP_DB.prepare(
+				"SELECT id, ip, created_at FROM ip_addresses ORDER BY created_at DESC"
+			)
+				.all();
+
+			return Response.json(
+				{ success: true, data: results || [], total: (results || []).length },
+				{ headers: corsHeaders }
+			);
+		} catch (error) {
+			console.error("Error listing IPs:", error);
+			return Response.json(
+				{ success: false, error: "Internal server error" },
+				{ status: 500, headers: corsHeaders }
+			);
+		}
+	}
+
+	// 404 for unknown API routes
+	return Response.json(
+		{ error: "Not found" },
+		{ status: 404, headers: corsHeaders }
+	);
+}
+
 const requestHandler = createRequestHandler(
 	() => import("virtual:react-router/server-build"),
 	import.meta.env.MODE,
 );
 
 export default {
-	fetch(request, env, ctx) {
+	async fetch(request, env, ctx) {
+		const url = new URL(request.url);
+
+		// Route API requests to the API handler
+		if (url.pathname.startsWith("/api/")) {
+			return handleAPI(request, env);
+		}
+
+		// Route all other requests to React Router
 		return requestHandler(request, {
 			cloudflare: { env, ctx },
 		});
